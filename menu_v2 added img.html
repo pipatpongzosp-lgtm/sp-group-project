@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Crispy Co.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #E4002B;
+      --dark: #1a0a00;
+      --cream: #FFF8F0;
+      --gold: #F5A623;
+      --radius: 16px;
+    }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--cream); color: var(--dark); }
+
+    /* NAV */
+    .topnav { display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px; background:var(--dark); position:sticky; top:0; z-index:100; }
+    .logo { color:#fff; font-size:22px; font-weight:900; letter-spacing:2px; }
+    .nav-links a { color:#fff; text-decoration:none; margin-left:28px; font-size:14px; font-weight:600; opacity:.8; }
+    .nav-links a:hover { opacity:1; }
+    .cart-btn { background:var(--red); color:#fff; border:none; padding:10px 20px; border-radius:50px; font-weight:700; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:8px; }
+    .cart-count { background:#fff; color:var(--red); border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; }
+
+    /* DESKTOP */
+    .desktop-layout { display:flex; min-height:calc(100vh - 64px); }
+    .mobile-layout { display:none; }
+
+    /* PROMO PANEL */
+    .promo-panel { width:360px; flex-shrink:0; position:sticky; top:64px; height:calc(100vh - 64px); background:var(--dark); overflow:hidden; display:flex; flex-direction:column; }
+    .promo-slides { flex:1; position:relative; }
+    .promo-slide { position:absolute; inset:0; display:flex; flex-direction:column; opacity:0; transition:opacity .5s; pointer-events:none; }
+    .promo-slide.active { opacity:1; pointer-events:all; }
+
+    /* ── Slide image (background fill) */
+    .slide-img {
+      width:100%; height:220px; flex-shrink:0;
+      background-size:cover; background-position:center; background-color:#2a1500;
+      /* เพิ่ม fallback gradient ถ้าไม่มีรูป */
+    }
+    .slide-img.no-img { display:flex; align-items:center; justify-content:center; font-size:72px; }
+
+    .slide-content { padding:24px; display:flex; flex-direction:column; gap:8px; flex:1; }
+    .slide-tag { font-size:11px; font-weight:800; letter-spacing:3px; color:var(--gold); }
+    .slide-title { font-size:26px; font-weight:900; color:#fff; line-height:1.1; }
+    .slide-price { font-size:32px; font-weight:900; color:var(--red); }
+    .slide-desc { font-size:12px; color:#ffffff80; line-height:1.5; }
+    .slide-cta { margin-top:auto; background:var(--red); color:#fff; border:none; padding:14px; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; letter-spacing:1px; transition:transform .15s; }
+    .slide-cta:hover { transform:scale(1.03); }
+
+    .promo-dots { display:flex; gap:8px; justify-content:center; padding:16px; }
+    .dot { width:8px; height:8px; border-radius:50%; border:none; background:#ffffff30; cursor:pointer; transition:all .3s; }
+    .dot.active { background:var(--red); width:24px; border-radius:4px; }
+
+    /* MENU PANEL */
+    .menu-panel { flex:1; padding:40px 36px; }
+    .section-label { font-size:11px; font-weight:800; letter-spacing:4px; color:var(--red); }
+    .section-title { font-size:32px; font-weight:900; margin:4px 0 24px; }
+
+    .category-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
+    .tab { padding:10px 20px; border-radius:50px; border:2px solid #e0d4c8; background:transparent; font-weight:700; font-size:13px; cursor:pointer; transition:all .2s; }
+    .tab.active { background:var(--dark); color:#fff; border-color:var(--dark); }
+
+    .menu-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:20px; }
+    .menu-card { background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 12px #0001; transition:transform .2s, box-shadow .2s; }
+    .menu-card:hover { transform:translateY(-4px); box-shadow:0 8px 28px #0002; }
+
+    /* ── Menu card image */
+    .menu-img {
+      width:100%; height:140px;
+      background-size:cover; background-position:center; background-color:#f5ede4;
+      display:flex; align-items:center; justify-content:center;
+      font-size:52px;
+    }
+
+    .menu-info { padding:14px; }
+    .menu-name { font-weight:800; font-size:14px; margin-bottom:4px; }
+    .menu-desc { font-size:12px; color:#888; margin-bottom:12px; line-height:1.4; }
+    .menu-footer { display:flex; align-items:center; justify-content:space-between; }
+    .menu-price { font-size:18px; font-weight:900; color:var(--red); }
+    .add-btn { width:34px; height:34px; border-radius:50%; background:var(--red); color:#fff; border:none; font-size:22px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .15s; }
+    .add-btn:hover { transform:scale(1.15); }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--dark); color:#fff; padding:12px 28px; border-radius:50px; font-weight:700; font-size:14px; opacity:0; transition:all .3s; z-index:999; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ===================== MOBILE ===================== */
+    @media(max-width:768px) {
+      .desktop-layout { display:none; }
+      .mobile-layout { display:block; padding-bottom:80px; }
+      .topnav { padding:0 16px; }
+      .nav-links { display:none; }
+
+      .mobile-promo-carousel { position:relative; height:240px; overflow:hidden; background:var(--dark); }
+      .mob-slide { position:absolute; inset:0; opacity:0; transition:opacity .5s; pointer-events:none; display:flex; flex-direction:column; justify-content:flex-end; padding:24px; }
+      .mob-slide.active { opacity:1; pointer-events:all; }
+      .mob-slide-bg { position:absolute; inset:0; background-size:cover; background-position:center; background-color:#2a1500; }
+      .mob-slide-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(to top,#0009,transparent); }
+      .mob-slide-tag { font-size:10px; font-weight:800; letter-spacing:3px; color:var(--gold); position:relative; z-index:2; }
+      .mob-slide-title { font-size:24px; font-weight:900; color:#fff; position:relative; z-index:2; }
+      .mob-slide-price { font-size:20px; font-weight:900; color:var(--red); position:relative; z-index:2; margin-bottom:10px; }
+      .mob-cta { background:var(--red); color:#fff; border:none; padding:10px 24px; border-radius:50px; font-weight:800; font-size:13px; cursor:pointer; position:relative; z-index:2; width:fit-content; }
+
+      .mob-dots { display:flex; gap:6px; justify-content:center; padding:12px; }
+      .mob-dot { width:7px; height:7px; border-radius:50%; border:none; background:#0003; cursor:pointer; transition:all .3s; }
+      .mob-dot.active { background:var(--red); width:20px; border-radius:3px; }
+
+      .mob-menu-section { padding:16px; }
+      .mob-section-hd { font-size:11px; font-weight:800; letter-spacing:4px; color:var(--red); margin-bottom:12px; }
+      .mob-cat-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:16px; }
+      .mob-cat-tabs::-webkit-scrollbar { display:none; }
+      .mob-tab { padding:8px 16px; border-radius:50px; border:2px solid #e0d4c8; background:transparent; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; }
+      .mob-tab.active { background:var(--dark); color:#fff; border-color:var(--dark); }
+
+      .mob-card { display:flex; align-items:center; gap:14px; background:#fff; border-radius:14px; padding:12px; margin-bottom:10px; box-shadow:0 2px 8px #0001; }
+      .mob-card-img { width:72px; height:72px; border-radius:10px; background-size:cover; background-position:center; background-color:#f5ede4; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:32px; }
+      .mob-card-info { flex:1; }
+      .mob-card-name { font-weight:800; font-size:13px; margin-bottom:2px; }
+      .mob-card-desc { font-size:11px; color:#888; margin-bottom:6px; }
+      .mob-card-price { font-size:15px; font-weight:900; color:var(--red); }
+      .mob-add-btn { width:34px; height:34px; border-radius:50%; background:var(--red); color:#fff; border:none; font-size:22px; cursor:pointer; flex-shrink:0; }
+
+      .mob-cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--dark); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:14px 20px; z-index:50; }
+      .mob-cart-count { font-size:13px; opacity:.7; }
+      .mob-cart-total { font-size:18px; font-weight:900; }
+      .mob-checkout-btn { background:var(--red); color:#fff; border:none; padding:12px 20px; border-radius:50px; font-weight:800; font-size:13px; cursor:pointer; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="logo">CRISPY CO.</div>
+    <div class="nav-links" id="desknav">
+      <a href="#">Menu</a>
+      <a href="#">Order</a>
+      <a href="#">Locations</a>
+    </div>
+    <button class="cart-btn" onclick="showCart()"><a href="https://sp-group-project.vercel.app/custom-order.html">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </a>
+    </button>
+  </nav>
+
+  <!-- DESKTOP -->
+  <div class="desktop-layout">
+    <aside class="promo-panel">
+      <div class="promo-slides" id="promoSlides"></div>
+      <div class="promo-dots" id="promoDots"></div>
+    </aside>
+    <main class="menu-panel">
+      <div class="section-label">OUR MENU</div>
+      <div class="section-title">WHAT ARE YOU CRAVING?</div>
+      <div class="category-tabs" id="deskTabs">
+        <button class="tab active" onclick="filterCat(this,'all')">All</button>
+        <button class="tab" onclick="filterCat(this,'bucket')">Buckets</button>
+        <button class="tab" onclick="filterCat(this,'sandwich')">Sandwiches</button>
+        <button class="tab" onclick="filterCat(this,'side')">Sides</button>
+        <button class="tab" onclick="filterCat(this,'dessert')">Desserts</button>
+    
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </main>
+  </div>
+
+  <!-- MOBILE -->
+  <div class="mobile-layout">
+    <div class="mobile-promo-carousel" id="mobCarousel"></div>
+    <div class="mob-dots" id="mobDots"></div>
+    <div class="mob-menu-section">
+      <div class="mob-section-hd">MENU</div>
+      <div class="mob-cat-tabs" id="mobTabs">
+        <button class="mob-tab active" onclick="mobFilter(this,'all')">All</button>
+        <button class="mob-tab" onclick="mobFilter(this,'bucket')">Buckets</button>
+        <button class="mob-tab" onclick="mobFilter(this,'sandwich')">Sandwiches</button>
+        <button class="mob-tab" onclick="mobFilter(this,'side')">Sides</button>
+        <button class="mob-tab" onclick="mobFilter(this,'dessert')">Desserts</button>
+      </div>
+      <div class="mob-menu-list" id="mobMenuList"></div>
+    </div>
+    <div class="mob-cart-bar">
+      <div class="mob-cart-info">
+        <div class="mob-cart-count" id="mobCartCount">0 items</div>
+        <div class="mob-cart-total" id="mobCartTotal">฿0.-</div>
+      </div>
+      <button class="mob-checkout-btn" onclick="showCart()">VIEW CART →</button>
+  
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =========================================================
+// 📌 แก้ไขรูปภาพได้ที่นี่
+// =========================================================
+
+// โปรโมชั่น — ใส่ URL รูปใน img (ถ้าไม่มีรูปจะแสดง emoji แทน)
+const PROMOS = [
+  {
+    tag: 'LIMITED TIME',
+    title: 'PORDEE BUCKET',
+    price: '฿199.-',
+    desc: '5 Jan 26 – 22 Jul 26 · Prices may vary per channel',
+    img: 'https://www.maggi.co.th/sites/default/files/srh_recipes/22083cfb8eb29281fa1992e9aa589423.jpeg',           // ← ใส่ URL รูปตรงนี้ เช่น 'images/pordee.jpg'
+    emoji: '🪣',       // แสดงเมื่อไม่มีรูป
+    deal: ['Pordee Bucket', 199]
+  },
+  {
+    tag: 'COLLAB DROP',
+    title: 'FLIP FLOP EDITION 2026',
+    price: '฿199.-',
+    desc: '1 Apr 26 – 22 Apr 26 · Limited stock',
+    img: '',           // ← ใส่ URL รูปตรงนี้
+    emoji: '🩴',
+    deal: ['KFC Flip Flop', 199]
+  },
+  {
+    tag: 'SNACK SHARING',
+    title: "CHICK N' SHARE SET",
+    price: '฿99.-',
+    desc: '28 Aug 25 – 22 Apr 26',
+    img: '',           // ← ใส่ URL รูปตรงนี้
+    emoji: '🍟',
+    deal: ['Chick N Share', 99]
+  },
+  {
+    tag: 'NEW ARRIVAL',
+    title: 'ZABB TEAM BOX',
+    price: '฿149.-',
+    desc: 'Apr 26 · Available at all branches',
+    img: '',           // ← ใส่ URL รูปตรงนี้
+    emoji: '📦',
+    deal: ['Zabb Team Box', 149]
+  },
+];
+
+// เมนู — ใส่ URL รูปใน img (ถ้าไม่มีรูปจะแสดง emoji แทน)
+const MENU = [
+  { id:1,  name:'Signature 8pc Bucket',   desc:'Classic fried chicken, 8 pieces', price:299, cat:'bucket',   img:'https://www.maggi.co.th/sites/default/files/srh_recipes/22083cfb8eb29281fa1992e9aa589423.jpeg', emoji:'🪣' },
+  { id:2,  name:'Party Pack 20pc',         desc:'Spicy chicken bucket',            price:599, cat:'bucket',   img:'', emoji:'🪣' },
+  { id:3,  name:'Zabb Team Box',           desc:'Wingz Zabb + nuggets combo',      price:149, cat:'bucket',   img:'', emoji:'📦' },
+  { id:4,  name:'Spicy Chicken Sandwich',  desc:'Crispy, spicy, and juicy',        price:89,  cat:'sandwich', img:'', emoji:'🍔' },
+  { id:5,  name:'Classic Sandwich',        desc:'Original crispy chicken',         price:79,  cat:'sandwich', img:'', emoji:'🥪' },
+  { id:6,  name:'Zinger Double',           desc:'Double patty, double flavor',     price:119, cat:'sandwich', img:'', emoji:'🍔' },
+  { id:7,  name:'Fries',                   desc:'Golden crispy fries',             price:39,  cat:'side',     img:'', emoji:'🍟' },
+  { id:8,  name:'Coleslaw',                desc:'Creamy classic slaw',             price:29,  cat:'side',     img:'', emoji:'🥗' },
+  { id:9,  name:'Mac & Cheese',            desc:'Creamy, cheesy goodness',         price:49,  cat:'side',     img:'', emoji:'🧀' },
+  { id:10, name:'Chocolate Cupcake',       desc:'Rich chocolate treat',            price:45,  cat:'dessert',  img:'', emoji:'🧁' },
+  { id:11, name:'Soft Serve',              desc:'Vanilla swirl',                   price:35,  cat:'dessert',  img:'', emoji:'🍦' },
+];
+
+// =========================================================
+
+let cart = [], total = 0, currentSlide = 0, mobCurrentSlide = 0;
+
+// helper: คืน style string สำหรับ background-image
+function bgStyle(img) {
+  return img ? `background-image:url('${img}');` : '';
+}
+
+// ── Build promo slides
+function buildPromos() {
+  const slides = document.getElementById('promoSlides');
+  const dots   = document.getElementById('promoDots');
+  slides.innerHTML = PROMOS.map((p, i) => `
+    <div class="promo-slide${i===0?' active':''}" id="slide-${i}">
+      <div class="slide-img${p.img?'':' no-img'}" style="${bgStyle(p.img)}">
+        ${p.img ? '' : p.emoji}
+      </div>
+      <div class="slide-content">
+        <span class="slide-tag">${p.tag}</span>
+        <div class="slide-title">${p.title}</div>
+        <div class="slide-price">${p.price}</div>
+        <div class="slide-desc">${p.desc}</div>
+        <button class="slide-cta" onclick="addDeal('${p.deal[0]}',${p.deal[1]})">Order Now</button>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = PROMOS.map((_, i) => `
+    <button class="dot${i===0?' active':''}" onclick="goSlide(${i})"></button>
+  `).join('');
+}
+
+// ── Build mobile promo
+function buildMobPromos() {
+  const car  = document.getElementById('mobCarousel');
+  const dots = document.getElementById('mobDots');
+  car.innerHTML = PROMOS.map((p, i) => `
+    <div class="mob-slide${i===0?' active':''}">
+      <div class="mob-slide-bg" style="${bgStyle(p.img)}"></div>
+      <div style="position:relative;z-index:2">
+        <div class="mob-slide-tag">${p.tag}</div>
+        <div class="mob-slide-title">${p.title}</div>
+        <div class="mob-slide-price">${p.price}</div>
+        <button class="mob-cta" onclick="addDeal('${p.deal[0]}',${p.deal[1]})">Order Now</button>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = PROMOS.map((_, i) => `
+    <button class="mob-dot${i===0?' active':''}" onclick="mobGoSlide(${i})"></button>
+  `).join('');
+
+  // re-attach touch
+  car.addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; });
+  car.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 40) mobGoSlide((mobCurrentSlide + (dx<0?1:-1) + PROMOS.length) % PROMOS.length);
+  });
+}
+
+// ── Render menu grid + mobile list
+function renderMenu(cat='all') {
+  const items = cat==='all' ? MENU : MENU.filter(m=>m.cat===cat);
+
+  document.getElementById('menuGrid').innerHTML = items.map(m=>`
+    <div class="menu-card">
+      <div class="menu-img" style="${bgStyle(m.img)}">
+        ${m.img ? '' : m.emoji}
+      </div>
+      <div class="menu-info">
+        <div class="menu-name">${m.name}</div>
+        <div class="menu-desc">${m.desc}</div>
+        <div class="menu-footer">
+          <div class="menu-price">฿${m.price}.-</div>
+          <button class="add-btn" onclick="addItem('${m.name}',${m.price})">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('mobMenuList').innerHTML = items.map(m=>`
+    <div class="mob-card">
+      <div class="mob-card-img" style="${bgStyle(m.img)}">
+        ${m.img ? '' : m.emoji}
+      </div>
+      <div class="mob-card-info">
+        <div class="mob-card-name">${m.name}</div>
+        <div class="mob-card-desc">${m.desc}</div>
+        <div class="mob-card-price">฿${m.price}.-</div>
+      </div>
+      <button class="mob-add-btn" onclick="addItem('${m.name}',${m.price})">+</button>
+    </div>
+  `).join('');
+}
+
+function addItem(name, price) {
+  cart.push({name, price});
+  total += price;
+  updateCartUI();
+  showToast('Added: ' + name);
+}
+function addDeal(name, price) { addItem(name, price); }
+
+function updateCartUI() {
+  const count = cart.length;
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('mobCartCount').textContent = count + ' item' + (count!==1?'s':'');
+  document.getElementById('mobCartTotal').textContent = '฿'+total+'.-';
+}
+function showCart() {
+  const items = cart.map(c=>c.name+' ฿'+c.price).join('\n');
+  /*alert('🛒 YOUR CART\n\n'+(cart.length?items:'Empty cart')+'\n\nTotal: ฿'+total);*/
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+function goSlide(n) {
+  document.querySelectorAll('#promoSlides .promo-slide').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('#promoDots .dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+  currentSlide = n;
+}
+function mobGoSlide(n) {
+  document.querySelectorAll('#mobCarousel .mob-slide').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('#mobDots .mob-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+  mobCurrentSlide = n;
+}
+
+function filterCat(btn, cat) {
+  document.querySelectorAll('#deskTabs .tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderMenu(cat);
+}
+function mobFilter(btn, cat) {
+  document.querySelectorAll('#mobTabs .mob-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderMenu(cat);
+}
+
+let touchStartX = 0;
+
+// init
+buildPromos();
+buildMobPromos();
+renderMenu();
+
+setInterval(()=>goSlide((currentSlide+1)%PROMOS.length), 4000);
+setInterval(()=>mobGoSlide((mobCurrentSlide+1)%PROMOS.length), 3500);
+</script>
+</body>
+</html>

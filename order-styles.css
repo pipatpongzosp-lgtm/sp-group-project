@@ -687,3 +687,17 @@ body {
   flex-shrink: 0;
   overflow: hidden;
 }
+
+.tabb {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--red);
+  background: transparent;
+  color: var(--red-glow);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
