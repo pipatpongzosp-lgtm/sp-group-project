@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KFC Responsive UI - Pro Version</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Hide scrollbar for the carousel but keep functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-50 pb-20 md:pb-0 font-sans text-gray-800 antialiased">
+
+    <header class="sticky top-0 z-50 bg-white shadow-sm px-4 py-3 md:py-4 flex justify-between items-center lg:px-20 transition-all">
+        <div class="flex items-center gap-6 text-sm md:text-base font-black uppercase tracking-widest">
+            <button class="text-gray-400 hover:text-gray-600 transition">Pick up</button>
+            <button class="text-black border-b-4 border-[#e4002b] pb-1">Or Delivery</button>
+        </div>
+        <button class="bg-[#e4002b] text-white px-6 md:px-8 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-red-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+            Start Order
+        </button>
+    </header>
+
+    <section class="relative bg-black w-full group">
+        
+        <button id="prevSlide" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex" aria-label="Previous Slide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="nextSlide" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex" aria-label="Next Slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div id="carousel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth">
+            
+            <div class="min-w-full snap-center relative h-[350px] md:h-[500px] lg:h-[600px] bg-gradient-to-r from-red-950 to-red-800 flex-shrink-0">
+                <div class="absolute inset-0 bg-black/20"></div>
+                
+                <div class="relative z-10 p-8 md:p-16 flex flex-col justify-center h-full max-w-4xl lg:px-20">
+                    <p class="text-white font-bold text-xl md:text-2xl drop-shadow-md">ONLY 199.-</p>
+                    <h2 class="text-white text-4xl md:text-6xl font-black uppercase italic mb-6 drop-shadow-lg tracking-tight">Pordee Bucket</h2>
+                    <button class="bg-[#e4002b] text-white w-max px-10 py-3 md:py-4 rounded-full font-bold uppercase hover:bg-red-700 shadow-lg transform hover:scale-105 transition-all">
+                        Order now
+                    </button>
+                    <p class="absolute bottom-10 text-white/80 text-xs md:text-sm">*5 Jan 26 - 22 Jul 26 *Prices may vary in each sale channel</p>
+                </div>
+            </div>
+
+            <div class="min-w-full snap-center relative h-[350px] md:h-[500px] lg:h-[600px] bg-gray-900 flex items-center justify-center flex-shrink-0">
+                <span class="text-white/50 text-xl font-bold border-2 border-dashed border-white/30 p-10 rounded-xl">Insert Photo 2 Here</span>
+            </div>
+
+            <div class="min-w-full snap-center relative h-[350px] md:h-[500px] lg:h-[600px] bg-gray-800 flex items-center justify-center flex-shrink-0">
+                <span class="text-white/50 text-xl font-bold border-2 border-dashed border-white/30 p-10 rounded-xl">Insert Photo 3 Here</span>
+            </div>
+
+            <div class="min-w-full snap-center relative h-[350px] md:h-[500px] lg:h-[600px] bg-gray-900 flex items-center justify-center flex-shrink-0">
+                <span class="text-white/50 text-xl font-bold border-2 border-dashed border-white/30 p-10 rounded-xl">Insert Photo 4 Here</span>
+            </div>
+
+            <div class="min-w-full snap-center relative h-[350px] md:h-[500px] lg:h-[600px] bg-gray-800 flex items-center justify-center flex-shrink-0">
+                <span class="text-white/50 text-xl font-bold border-2 border-dashed border-white/30 p-10 rounded-xl">Insert Photo 5 Here</span>
+            </div>
+            
+        </div>
+
+        <div class="absolute bottom-6 w-full flex justify-center gap-3 z-20" id="dots-container">
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-white ring-2 ring-white ring-offset-2 ring-offset-transparent transition-all" aria-label="Go to slide 1"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all" aria-label="Go to slide 2"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all" aria-label="Go to slide 3"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all" aria-label="Go to slide 4"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all" aria-label="Go to slide 5"></button>
+        </div>
+    </section>
+
+    <div class="flex justify-center py-6 bg-white border-b border-gray-100 shadow-sm relative z-10">
+        <div class="flex gap-1.5">
+            <div class="w-2.5 h-8 bg-[#e4002b] rounded-sm"></div>
+            <div class="w-2.5 h-8 bg-[#e4002b] rounded-sm"></div>
+            <div class="w-2.5 h-8 bg-[#e4002b] rounded-sm"></div>
+        </div>
+    </div>
+
+    <main class="p-4 md:p-8 lg:px-20 max-w-[1600px] mx-auto mt-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 group cursor-pointer hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col">
+                <div class="h-48 md:h-56 bg-black flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white/30 border-b border-white/10">
+                        <i class="fas fa-image text-3xl mb-2"></i>
+                        <span class="text-sm font-bold">Image 1</span>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 group-hover:text-[#e4002b] transition-colors">The Signature Buckets</h3>
+                    <p class="text-[#e4002b] font-black text-2xl mt-2">$11.00</p>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 group cursor-pointer hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col">
+                <div class="h-48 md:h-56 bg-black flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white/30 border-b border-white/10">
+                        <i class="fas fa-image text-3xl mb-2"></i>
+                        <span class="text-sm font-bold">Image 2</span>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 group-hover:text-[#e4002b] transition-colors">Crispy Combos</h3>
+                    <p class="text-[#e4002b] font-black text-2xl mt-2">$7.00</p>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 group cursor-pointer hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col">
+                <div class="h-48 md:h-56 bg-black flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white/30 border-b border-white/10">
+                        <i class="fas fa-image text-3xl mb-2"></i>
+                        <span class="text-sm font-bold">Image 3</span>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 group-hover:text-[#e4002b] transition-colors">Zinger Burger Meal</h3>
+                    <p class="text-[#e4002b] font-black text-2xl mt-2">$8.50</p>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 group cursor-pointer hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col">
+                <div class="h-48 md:h-56 bg-black flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white/30 border-b border-white/10">
+                        <i class="fas fa-image text-3xl mb-2"></i>
+                        <span class="text-sm font-bold">Image 4</span>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 group-hover:text-[#e4002b] transition-colors">Family Feast</h3>
+                    <p class="text-[#e4002b] font-black text-2xl mt-2">$24.00</p>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 group cursor-pointer hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col">
+                <div class="h-48 md:h-56 bg-black flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white/30 border-b border-white/10">
+                        <i class="fas fa-image text-3xl mb-2"></i>
+                        <span class="text-sm font-bold">Image 5</span>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 group-hover:text-[#e4002b] transition-colors">Spicy Snack Box</h3>
+                    <p class="text-[#e4002b] font-black text-2xl mt-2">$5.00</p>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around px-2 py-3 md:hidden z-50 pb-safe shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <button class="flex flex-col items-center text-[#e4002b] gap-1">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors gap-1">
+            <i class="fas fa-utensils text-xl"></i>
+            <span class="text-[10px] font-bold">Menu</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors gap-1">
+            <i class="fas fa-percentage text-xl"></i>
+            <span class="text-[10px] font-bold">Rewards</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors gap-1 relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span class="text-[10px] font-bold">Cart</span>
+            <span class="absolute -top-1 -right-2 bg-[#e4002b] text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">2</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors gap-1">
+            <i class="fas fa-bars text-xl"></i>
+            <span class="text-[10px] font-bold">More</span>
+        </button>
+    </nav>
+
+    <script>
+        const carousel = document.getElementById('carousel');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        
+        // Function to update active dot based on scroll position
+        const updateDots = () => {
+            const scrollPosition = carousel.scrollLeft;
+            const slideWidth = carousel.offsetWidth;
+            const currentIndex = Math.round(scrollPosition / slideWidth);
+            
+            dots.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.className = "carousel-dot w-2.5 h-2.5 rounded-full bg-white ring-2 ring-white ring-offset-2 ring-offset-transparent transition-all";
+                } else {
+                    dot.className = "carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white/80 transition-all";
+                }
+            });
+        };
+
+        // Event Listeners for Arrows
+        if (nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
+            });
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -carousel.offsetWidth, behavior: 'smooth' });
+            });
+        }
+
+        // Event Listeners for Dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                carousel.scrollTo({ left: carousel.offsetWidth * index, behavior: 'smooth' });
+            });
+        });
+
+        // Listen for scroll to update dots
+        carousel.addEventListener('scroll', updateDots);
+        
+        // Handle window resize to keep snapping accurate
+        window.addEventListener('resize', updateDots);
+    </script>
+
+</body>
+</html>
