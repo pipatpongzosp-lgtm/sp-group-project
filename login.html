@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Login Page</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#CF0A0A',
+                        accent: '#DC5F00',
+                        neutral: '#EEEEEE',
+                    }
+                }
+            }
+        }
+    </script>
+
+     <style type="text/tailwindcss">
+         @layer components{
+          .input__card{   @apply flex flex-col text-[1vw] font-bold ;
+          }
+         
+         .btn{
+              @apply w-[25%] text-[1vw] bg-secondary hover:bg-accent text-neutral px-6 py-2 rounded-full font-semibold transition duration-300;
+         }
+         h1{
+            @apply text-[2vw] font-extrabold;
+         }
+         .form-card{
+            @apply flex flex-col bg-neutral justify-center items-center w-[60vw] h-[44vw] gap-3.5  m-2;
+         }
+          .form-card a{   @apply text-[1vw] font-normal}
+         .container-form{
+             @apply flex flex-col  w-full bg-accent justify-center items-center ;
+         }
+        }
+    </style>
+    <script>
+        function showLogin(){
+            document.getElementById("login").style.display="flex";
+            document.getElementById("register").style.display="none";
+        }
+        function showRegister(){
+            document.getElementById("register").style.display="flex";
+             document.getElementById("login").style.display="none";
+        }
+    </script>
+
+
+</head>
+<body>
+
+    <div class="container-form" id="login">
+    <form class="form-card"> 
+            
+            <h1 >SIGN IN</h1>
+            <span class="input__card">username : <input type="text"></span>
+            <span class="input__card">password : <input type="password"></span>
+             <button class="btn">
+                    Sign In
+                </button>
+                
+                <a href="#" onclick="showRegister()"> not have account? register</a>
+                
+        </form>
+   </div>
+
+   <div class="container-form hidden" id="register">
+    <form class="form-card"> 
+            
+            <h1 >REGISTER</h1>
+            <span class="input__card">username : <input type="text"></span>
+            <span class="input__card">password : <input type="password"></span>
+            <span class="input__card">NAME : <input type="text"></span>
+            <span class="input__card">Surname : <input type="text"></span>
+            <span class="input__card">Email : <input type="email"></span>
+            <span class="input__card">Birthday : <input type="date"> </span>
+
+             <button class="btn"> Register </button>
+                <a href="#" onclick="showLogin()"> alreeady have account? login</a>
+        </form>
+   </div>
+
+
+
+
+</body>
+</html>
