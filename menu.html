@@ -1,21 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Crispy Co.</title>
+    <title>Crispy Co. | Serious Punch Mode</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans+Thai:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              primary: "#000000",
-              secondary: "#CF0A0A",
+              primary: "#242424",
+              secondary: "#E4002B",
               accent: "#DC5F00",
-              neutral: "#EEEEEE",
+              neutral: "#eeeeee",
             },
           },
         },
@@ -23,1100 +28,773 @@
     </script>
 
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
       :root {
         --red: #e4002b;
-        --dark: #1a0a00;
-        --cream: #fff8f0;
-        --gold: #f5a623;
-        --radius: 16px;
+        --black: #242424;
+        --bg: #eeeeee;
+        --radius: 12px;
       }
       body {
-        font-family: "Segoe UI", sans-serif;
-        background: var(--cream);
-        color: var(--dark);
+        font-family: "IBM Plex Sans Thai", sans-serif;
+        background: var(--bg);
+        color: var(--black);
+      }
+      h1,
+      h2,
+      h3,
+      .bebas {
+        font-family: "Bebas Neue", sans-serif;
+        letter-spacing: 1px;
       }
 
-      /* NAV */
-      .topnav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 32px;
-        height: 64px;
-        background: var(--dark);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .logo {
-        color: #fff;
-        font-size: 22px;
-        font-weight: 900;
-        letter-spacing: 2px;
-      }
-      .nav-links a {
-        color: #fff;
-        text-decoration: none;
-        margin-left: 28px;
-        font-size: 14px;
-        font-weight: 600;
-        opacity: 0.8;
-      }
-      .nav-links a:hover {
-        opacity: 1;
-      }
-      .cart-btn {
-        background: var(--red);
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 50px;
-        font-weight: 700;
-        cursor: pointer;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .cart-count {
-        background: #fff;
-        color: var(--red);
-        border-radius: 50%;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: 900;
-      }
-
-      /* DESKTOP */
-      .desktop-layout {
-        display: flex;
-        min-height: calc(100vh - 64px);
-      }
-      .mobile-layout {
-        display: none;
-      }
-
-      /* PROMO PANEL */
+      /* --- PROMO PANEL --- */
       .promo-panel {
-        width: 360px;
-        flex-shrink: 0;
-        position: sticky;
-        top: 64px;
-        height: calc(100vh - 64px);
-        background: var(--dark);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-      .promo-slides {
-        flex: 1;
         position: relative;
+        width: 100%;
+        height: 400px;
+        background: var(--black);
+        overflow: hidden;
+      }
+      @media (min-width: 768px) {
+        .promo-panel {
+          width: 420px;
+          flex-shrink: 0;
+          position: sticky;
+          top: 72px;
+          height: calc(100vh - 72px);
+        }
       }
       .promo-slide {
         position: absolute;
         inset: 0;
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
-        opacity: 0;
-        transition: opacity 0.5s;
+        justify-content: flex-end;
         pointer-events: none;
       }
       .promo-slide.active {
         opacity: 1;
-        pointer-events: all;
+        pointer-events: auto;
       }
-
-      /* ── Slide image (background fill) */
-      .slide-img {
+      .slide-img-container {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+      .slide-img-container img {
         width: 100%;
-        height: 220px;
-        flex-shrink: 0;
-        background-size: cover;
-        background-position: center;
-        background-color: #2a1500;
-        /* เพิ่ม fallback gradient ถ้าไม่มีรูป */
+        height: 100%;
+        object-fit: cover;
       }
-      .slide-img.no-img {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 72px;
+      .slide-img-container::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.95) 5%,
+          rgba(0, 0, 0, 0.5) 40%,
+          transparent 100%
+        );
       }
-
       .slide-content {
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        flex: 1;
+        position: relative;
+        z-index: 2;
+        padding: 40px 30px 60px 30px;
+        color: white;
       }
       .slide-tag {
-        font-size: 11px;
+        color: var(--red);
         font-weight: 800;
+        font-size: 14px;
         letter-spacing: 3px;
-        color: var(--gold);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
       }
       .slide-title {
-        font-size: 26px;
-        font-weight: 900;
-        color: #fff;
-        line-height: 1.1;
+        font-size: 3.5rem;
+        line-height: 0.9;
+        margin: 10px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       }
       .slide-price {
-        font-size: 32px;
-        font-weight: 900;
-        color: var(--red);
-      }
-      .slide-desc {
-        font-size: 12px;
-        color: #ffffff80;
-        line-height: 1.5;
-      }
-      .slide-cta {
-        margin-top: auto;
-        background: var(--red);
+        font-size: 2.5rem;
         color: #fff;
-        border: none;
-        padding: 14px;
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 800;
-        cursor: pointer;
-        letter-spacing: 1px;
-        transition: transform 0.15s;
-      }
-      .slide-cta:hover {
-        transform: scale(1.03);
+        margin-bottom: 15px;
       }
 
-      .promo-dots {
+      .promo-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
         display: flex;
-        gap: 8px;
         justify-content: center;
-        padding: 16px;
+        gap: 12px;
+        z-index: 10;
       }
-      .dot {
-        width: 8px;
-        height: 8px;
+      .promo-dot {
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        border: none;
-        background: #ffffff30;
+        background: rgba(255, 255, 255, 0.4);
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
       }
-      .dot.active {
+      .promo-dot.active {
         background: var(--red);
-        width: 24px;
-        border-radius: 4px;
+        transform: scale(1.3);
       }
 
-      /* MENU PANEL */
-      .menu-panel {
-        flex: 1;
-        padding: 40px 36px;
-      }
-      .section-label {
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 4px;
-        color: var(--red);
-      }
-      .section-title {
-        font-size: 32px;
-        font-weight: 900;
-        margin: 4px 0 24px;
-      }
-
-      .category-tabs {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 28px;
-        flex-wrap: wrap;
-      }
-      .tab {
-        padding: 10px 20px;
-        border-radius: 50px;
-        border: 2px solid #e0d4c8;
-        background: transparent;
-        font-weight: 700;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .tab.active {
-        background: var(--dark);
-        color: #fff;
-        border-color: var(--dark);
-      }
-
+      /* --- MENU GRID --- */
       .menu-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 25px;
       }
       .menu-card {
         background: #fff;
         border-radius: var(--radius);
+        border: 2px solid transparent;
+        transition: 0.3s;
         overflow: hidden;
-        box-shadow: 0 2px 12px #0001;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
       }
       .menu-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 28px #0002;
+        border-color: var(--black);
+        transform: translateY(-5px);
+        box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.08);
       }
-
-      /* ── Menu card image */
-      .menu-img {
+      .menu-img-box {
+        height: 180px;
+        background: #f0f0f0;
+        position: relative;
+        overflow: hidden;
+      }
+      .menu-img-box img {
         width: 100%;
-        height: 140px;
-        background-size: cover;
-        background-position: center;
-        background-color: #f5ede4;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 52px;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+      }
+      .menu-card:hover .menu-img-box img {
+        transform: scale(1.05);
       }
 
-      .menu-info {
-        padding: 14px;
-      }
-      .menu-name {
-        font-weight: 800;
-        font-size: 14px;
-        margin-bottom: 4px;
-      }
-      .menu-desc {
-        font-size: 12px;
-        color: #888;
-        margin-bottom: 12px;
-        line-height: 1.4;
-      }
-      .menu-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .menu-price {
-        font-size: 18px;
-        font-weight: 900;
-        color: var(--red);
-      }
       .add-btn {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
         background: var(--red);
-        color: #fff;
-        border: none;
-        font-size: 22px;
-        font-weight: 700;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.15s;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-weight: bold;
+        transition: 0.2s;
       }
       .add-btn:hover {
-        transform: scale(1.15);
+        background: #000;
+        transform: scale(1.05);
       }
 
-      /* TOAST */
+      /* สถานะ Sold Out */
+      .sold-out-img {
+        filter: grayscale(100%) opacity(50%);
+      }
+      .sold-out-btn {
+        background: #e0e0e0;
+        color: #888;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: not-allowed;
+      }
+
+      /* Tabs */
+      .tab {
+        transition: all 0.2s ease-in-out;
+      }
+      .tab:hover:not(.active) {
+        background: #e0e0e0;
+      }
+
+      /* Toast */
       .toast {
         position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%) translateY(20px);
-        background: var(--dark);
-        color: #fff;
-        padding: 12px 28px;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 14px;
+        bottom: 30px;
+        right: 30px;
+        background: var(--black);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        transform: translateY(100px);
         opacity: 0;
-        transition: all 0.3s;
-        z-index: 999;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1000;
+        border-left: 5px solid var(--red);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
       }
       .toast.show {
+        transform: translateY(0);
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
       }
 
-      /* ===================== MOBILE ===================== */
-      @media (max-width: 768px) {
-        .desktop-layout {
-          display: none;
-        }
-        .mobile-layout {
-          display: block;
-          padding-bottom: 80px;
-        }
-        .topnav {
-          padding: 0 16px;
-        }
-        .nav-links {
-          display: none;
-        }
-
-        .mobile-promo-carousel {
-          position: relative;
-          height: 240px;
-          overflow: hidden;
-          background: var(--dark);
-        }
-        .mob-slide {
-          position: absolute;
-          inset: 0;
-          opacity: 0;
-          transition: opacity 0.5s;
-          pointer-events: none;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 24px;
-        }
-        .mob-slide.active {
-          opacity: 1;
-          pointer-events: all;
-        }
-        .mob-slide-bg {
-          position: absolute;
-          inset: 0;
-          background-size: cover;
-          background-position: center;
-          background-color: #2a1500;
-        }
-        .mob-slide-bg::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, #0009, transparent);
-        }
-        .mob-slide-tag {
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: 3px;
-          color: var(--gold);
-          position: relative;
-          z-index: 2;
-        }
-        .mob-slide-title {
-          font-size: 24px;
-          font-weight: 900;
-          color: #fff;
-          position: relative;
-          z-index: 2;
-        }
-        .mob-slide-price {
-          font-size: 20px;
-          font-weight: 900;
-          color: var(--red);
-          position: relative;
-          z-index: 2;
-          margin-bottom: 10px;
-        }
-        .mob-cta {
-          background: var(--red);
-          color: #fff;
-          border: none;
-          padding: 10px 24px;
-          border-radius: 50px;
-          font-weight: 800;
-          font-size: 13px;
-          cursor: pointer;
-          position: relative;
-          z-index: 2;
-          width: fit-content;
-        }
-
-        .mob-dots {
-          display: flex;
-          gap: 6px;
-          justify-content: center;
-          padding: 12px;
-        }
-        .mob-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          border: none;
-          background: #0003;
-          cursor: pointer;
-          transition: all 0.3s;
-        }
-        .mob-dot.active {
-          background: var(--red);
-          width: 20px;
-          border-radius: 3px;
-        }
-
-        .mob-menu-section {
-          padding: 16px;
-        }
-        .mob-section-hd {
-          font-size: 11px;
-          font-weight: 800;
-          letter-spacing: 4px;
-          color: var(--red);
-          margin-bottom: 12px;
-        }
-        .mob-cat-tabs {
-          display: flex;
-          gap: 6px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-          margin-bottom: 16px;
-        }
-        .mob-cat-tabs::-webkit-scrollbar {
-          display: none;
-        }
-        .mob-tab {
-          padding: 8px 16px;
-          border-radius: 50px;
-          border: 2px solid #e0d4c8;
-          background: transparent;
-          font-weight: 700;
-          font-size: 12px;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        .mob-tab.active {
-          background: var(--dark);
-          color: #fff;
-          border-color: var(--dark);
-        }
-
-        .mob-card {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          background: #fff;
-          border-radius: 14px;
-          padding: 12px;
-          margin-bottom: 10px;
-          box-shadow: 0 2px 8px #0001;
-        }
-        .mob-card-img {
-          width: 72px;
-          height: 72px;
-          border-radius: 10px;
-          background-size: cover;
-          background-position: center;
-          background-color: #f5ede4;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 32px;
-        }
-        .mob-card-info {
-          flex: 1;
-        }
-        .mob-card-name {
-          font-weight: 800;
-          font-size: 13px;
-          margin-bottom: 2px;
-        }
-        .mob-card-desc {
-          font-size: 11px;
-          color: #888;
-          margin-bottom: 6px;
-        }
-        .mob-card-price {
-          font-size: 15px;
-          font-weight: 900;
-          color: var(--red);
-        }
-        .mob-add-btn {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          background: var(--red);
-          color: #fff;
-          border: none;
-          font-size: 22px;
-          cursor: pointer;
-          flex-shrink: 0;
-        }
-
-        .mob-cart-bar {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: var(--dark);
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 14px 20px;
-          z-index: 50;
-        }
-        .mob-cart-count {
-          font-size: 13px;
-          opacity: 0.7;
-        }
-        .mob-cart-total {
-          font-size: 18px;
-          font-weight: 900;
-        }
-        .mob-checkout-btn {
-          background: var(--red);
-          color: #fff;
-          border: none;
-          padding: 12px 20px;
-          border-radius: 50px;
-          font-weight: 800;
-          font-size: 13px;
-          cursor: pointer;
-        }
+      /* Mini Cart Custom Scrollbar */
+      #cartItemsList::-webkit-scrollbar {
+        width: 6px;
+      }
+      #cartItemsList::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      #cartItemsList::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
       }
     </style>
   </head>
   <body>
-    <header class="bg-primary text-neutral shadow-lg">
+    <header class="bg-primary text-neutral shadow-lg sticky top-0 z-40">
       <nav
         class="container mx-auto px-4 py-4 flex justify-between items-center"
       >
-        <!-- Logo -->
         <div class="flex items-center">
-          <a href="#" class="text-2xl font-bold text-accent"> LOGO </a>
+          <a
+            href="#"
+            class="text-3xl font-bold text-white bebas flex items-center gap-2"
+          >
+            <i data-lucide="hand-fist" class="h-8 w-8 text-secondary"></i>
+            <span>SERIOUS PUNCH</span>
+          </a>
         </div>
-
-        <!-- Desktop Menu -->
         <div class="hidden md:flex space-x-8 items-center">
           <ul class="flex space-x-6">
             <li>
-              <a
-                href="index.html"
-                class="hover:text-secondary transition duration-300"
+              <a href="index.html" class="hover:text-secondary transition"
                 >Home</a
               >
             </li>
             <li>
-              <a
-                href="menu.html"
-                class="hover:text-secondary transition duration-300"
-                >Menu</a
-              >
+              <a href="menu.html" class="text-secondary font-bold">Menu</a>
             </li>
             <li>
               <a
                 href="custom-order.html"
-                class="hover:text-secondary transition duration-300"
+                class="hover:text-secondary transition"
                 >Order</a
               >
             </li>
-            <li>
-              <a href="#" class="hover:text-secondary transition duration-300"
-                >Contact</a
-              >
-            </li>
           </ul>
+
           <button
-            class="bg-secondary hover:bg-accent text-neutral px-6 py-2 rounded-full font-semibold transition duration-300"
+            id="cart-wrapper"
+            class="flex items-center gap-4 bg-[#333] hover:bg-secondary px-4 py-2 rounded-full transition-all duration-300 cursor-pointer"
+            onclick="toggleCart()"
+          >
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
+            <span id="cartCountDesktop" class="font-bold">0</span>
+          </button>
+
+          <button
+            class="bg-secondary hover:bg-white hover:text-black text-neutral px-6 py-2 rounded-full font-semibold transition"
           >
             <a href="login.html">Sign In</a>
           </button>
         </div>
-
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden flex items-center">
-          <button
-            id="mobile-menu-button"
-            class="text-neutral focus:outline-none"
-          >
-            <svg
-              class="w-8 h-8"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              ></path>
-            </svg>
-          </button>
-        </div>
       </nav>
-
-      <!-- Mobile Menu (Hidden by default) -->
-      <div
-        id="mobile-menu"
-        class="hidden md:hidden bg-primary border-t border-accent/20"
-      >
-        <ul class="flex flex-col p-4 space-y-4">
-          <li>
-            <a
-              href="index.html"
-              class="block hover:text-secondary transition duration-300"
-              >Home</a
-            >
-          </li>
-          <li>
-            <a
-              href="menu.html"
-              class="block hover:text-secondary transition duration-300"
-              >Menu</a
-            >
-          </li>
-          <li>
-            <a
-              href="custom-order.html"
-              class="block hover:text-secondary transition duration-300"
-              >Order</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="block hover:text-secondary transition duration-300"
-              >Contact</a
-            >
-          </li>
-          <li>
-            <button
-              class="w-full bg-secondary hover:bg-accent text-neutral px-6 py-2 rounded-lg font-semibold transition duration-300"
-            >
-              <a href="login.html">Sign In</a>
-            </button>
-          </li>
-        </ul>
-      </div>
     </header>
-    <script>
-      const btn = document.getElementById("mobile-menu-button");
-      const menu = document.getElementById("mobile-menu");
 
-      btn.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-      });
-    </script>
-    <div class="page-wrapper">
-      <!-- DESKTOP -->
-      <div class="desktop-layout">
-        <aside class="promo-panel">
-          <div class="promo-slides" id="promoSlides"></div>
-          <div class="promo-dots" id="promoDots"></div>
-        </aside>
-        <main class="menu-panel">
-          <div class="section-label">OUR MENU</div>
-          <div class="section-title">WHAT ARE YOU CRAVING?</div>
-          <div class="category-tabs" id="deskTabs">
-            <button class="tab active" onclick="filterCat(this, 'all')">
-              All
-            </button>
-            <button class="tab" onclick="filterCat(this, 'bucket')">
-              Buckets
-            </button>
-            <button class="tab" onclick="filterCat(this, 'sandwich')">
-              Sandwiches
-            </button>
-            <button class="tab" onclick="filterCat(this, 'side')">Sides</button>
-            <button class="tab" onclick="filterCat(this, 'dessert')">
-              Desserts
-            </button>
-          </div>
-          <div class="menu-grid" id="menuGrid"></div>
-        </main>
+    <div class="flex flex-col md:flex-row min-h-screen relative">
+      <aside class="promo-panel" id="promoContainer"></aside>
+
+      <main class="flex-1 p-6 md:p-12 pb-32 md:pb-12">
+        <div class="mb-10">
+          <span
+            class="text-secondary font-black tracking-widest text-sm uppercase"
+            >Explore Flavors</span
+          >
+          <h2 class="text-5xl font-black bebas mt-2 text-primary">
+            SERIOUS SELECTIONS
+          </h2>
+        </div>
+
+        <div
+          class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide"
+          id="catTabs"
+        >
+          <button
+            class="tab active bg-primary text-white px-6 py-2 rounded-md font-bold"
+            onclick="filterMenu('all', this)"
+          >
+            ALL
+          </button>
+          <button
+            class="tab border-2 border-primary text-primary px-6 py-2 rounded-md font-bold hover:bg-gray-100"
+            onclick="filterMenu('bucket', this)"
+          >
+            BUCKETS
+          </button>
+          <button
+            class="tab border-2 border-primary text-primary px-6 py-2 rounded-md font-bold hover:bg-gray-100"
+            onclick="filterMenu('sandwich', this)"
+          >
+            SANDWICHES
+          </button>
+          <button
+            class="tab border-2 border-primary text-primary px-6 py-2 rounded-md font-bold hover:bg-gray-100"
+            onclick="filterMenu('side', this)"
+          >
+            SIDES
+          </button>
+          <button
+            class="tab border-2 border-primary text-primary px-6 py-2 rounded-md font-bold hover:bg-gray-100"
+            onclick="filterMenu('desserts', this)"
+          >
+            DESSERTS
+          </button>
+        </div>
+
+        <div class="menu-grid" id="menuGrid"></div>
+      </main>
+    </div>
+
+    <div
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-primary p-4 flex justify-between items-center text-white z-40 border-t-4 border-secondary cursor-pointer"
+      onclick="toggleCart()"
+    >
+      <div>
+        <div class="text-xs opacity-60 uppercase font-bold" id="mobCartCount">
+          0 Items
+        </div>
+        <div class="text-xl font-black text-secondary" id="mobCartTotal">
+          ฿0.-
+        </div>
+      </div>
+      <button
+        class="bg-secondary px-8 py-3 rounded-full font-black text-sm bebas shadow-lg hover:bg-white hover:text-black transition flex items-center"
+      >
+        VIEW CART <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+      </button>
+    </div>
+
+    <div
+      id="cartOverlay"
+      class="fixed inset-0 bg-black/60 z-50 hidden transition-opacity opacity-0"
+      onclick="toggleCart()"
+    ></div>
+
+    <div
+      id="cartSidebar"
+      class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl"
+    >
+      <div class="p-5 bg-primary text-white flex justify-between items-center">
+        <h2
+          class="text-2xl font-bold bebas tracking-widest flex items-center gap-2"
+        >
+          <i data-lucide="shopping-bag" class="w-6 h-6 text-secondary"></i> YOUR
+          CART
+        </h2>
+        <button onclick="toggleCart()" class="hover:text-secondary transition">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
       </div>
 
-      <!-- MOBILE -->
-      <div class="mobile-layout">
-        <div class="mobile-promo-carousel" id="mobCarousel"></div>
-        <div class="mob-dots" id="mobDots"></div>
-        <div class="mob-menu-section">
-          <div class="mob-section-hd">MENU</div>
-          <div class="mob-cat-tabs" id="mobTabs">
-            <button class="mob-tab active" onclick="mobFilter(this, 'all')">
-              All
-            </button>
-            <button class="mob-tab" onclick="mobFilter(this, 'bucket')">
-              Buckets
-            </button>
-            <button class="mob-tab" onclick="mobFilter(this, 'sandwich')">
-              Sandwiches
-            </button>
-            <button class="mob-tab" onclick="mobFilter(this, 'side')">
-              Sides
-            </button>
-            <button class="mob-tab" onclick="mobFilter(this, 'dessert')">
-              Desserts
-            </button>
-          </div>
-          <div class="mob-menu-list" id="mobMenuList"></div>
+      <div
+        id="cartItemsList"
+        class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"
+      ></div>
+
+      <div class="p-5 border-t border-gray-200 bg-gray-50">
+        <div
+          class="flex justify-between items-center font-bold text-lg mb-4 text-primary"
+        >
+          <span>Subtotal</span>
+          <span
+            id="miniCartTotal"
+            class="text-3xl text-secondary bebas tracking-wide"
+            >฿0.-</span
+          >
         </div>
-        <div class="mob-cart-bar">
-          <div class="mob-cart-info">
-            <div class="mob-cart-count" id="mobCartCount">0 items</div>
-            <div class="mob-cart-total" id="mobCartTotal">฿0.-</div>
-          </div>
-          <button class="mob-checkout-btn" onclick="showCart()">
-            VIEW CART →
-          </button>
-          <!--- ทำไมมันอันนี้ไม่โชว์อ่ะ????????-->
-        </div>
+        <button
+          class="w-full bg-secondary text-white font-black bebas text-2xl py-4 rounded-lg shadow-[0_6px_0_#800018] hover:translate-y-[4px] hover:shadow-[0_2px_0_#800018] transition"
+          onclick="
+            alert('ไปหน้า Checkout เลือกว่าจะเพิ่ม Topping หรือกรอกที่อยู่')
+          "
+        >
+          PROCEED TO CHECKOUT
+        </button>
       </div>
     </div>
 
-    <div class="toast" id="toast"></div>
+    <div class="toast flex items-center gap-3" id="toast">
+      <i data-lucide="check-circle" class="w-5 h-5 text-secondary"></i>
+      <span id="toast-text">Item added to cart!</span>
+    </div>
 
     <script>
-      // =========================================================
-      // แก้ไขรูปภาพได้ที่นี่
-      // =========================================================
-
-      // โปรโมชั่น — ใส่ URL รูปใน img (ถ้าไม่มีรูปจะแสดง emoji แทน)
       const PROMOS = [
         {
           tag: "LIMITED TIME",
-          title: "PORDEE BUCKET",
+          title: "SMILE BUCKET",
           price: "฿199.-",
-          desc: "5 Jan 26 – 22 Jul 26 · Prices may vary per channel",
-          img: "images/pro-1.webp", // ← ใส่ URL รูปตรงนี้ เช่น 'images/pordee.jpg' + ภาพต้องเต็มพื้นที่นะ!!
-          deal: ["Pordee Bucket", 199],
+          img: "../images/pro-1.png",
         },
         {
-          tag: "COLLAB DROP",
-          title: "FLIP FLOP EDITION 2026",
-          price: "฿199.-",
-          desc: "1 Apr 26 – 22 Apr 26 · Limited stock",
-          img: "images/pro-2.jpeg", // ← ใส่ URL รูปตรงนี้
-          deal: ["KFC Flip Flop", 199],
-        },
-        {
-          tag: "SNACK SHARING",
-          title: "CHICK N' SHARE SET",
-          price: "฿99.-",
-          desc: "28 Aug 25 – 22 Apr 26",
-          img: "images/pro-3.webp", // ← ใส่ URL รูปตรงนี้
-          deal: ["Chick N Share", 99],
-        },
-        {
-          tag: "NEW ARRIVAL",
+          tag: "HOT DROP",
           title: "ZABB TEAM BOX",
           price: "฿149.-",
-          desc: "Apr 26 · Available at all branches",
-          img: "images/pro-4.jpeg", // ← ใส่ URL รูปตรงนี้
-          deal: ["Zabb Team Box", 149],
+          img: "../images/pro-2.png",
+        },
+        {
+          tag: "SHARING",
+          title: "CHICK N' SHARE",
+          price: "฿99.-",
+          img: "../images/pro-3.png",
+        },
+        {
+          tag: "NEW",
+          title: "CHICKSKATE",
+          price: "฿199.-",
+          img: "../images/pro-4.png",
         },
       ];
 
-      // เมนู — ใส่ URL รูปใน img (ถ้าไม่มีรูปจะแสดง emoji แทน)
       const MENU = [
         {
           id: 1,
           name: "Signature 8pc Bucket",
-          desc: "Classic fried chicken, 8 pieces",
           price: 299,
           cat: "bucket",
-          img: "https://www.maggi.co.th/sites/default/files/srh_recipes/22083cfb8eb29281fa1992e9aa589423.jpeg",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-1.png",
+          desc: "Classic Original Recipe chicken.",
         },
         {
           id: 2,
           name: "Party Pack 20pc",
-          desc: "Spicy chicken bucket",
-          price: 599,
+          price: 119,
           cat: "bucket",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-2.png",
+          desc: "Extra spicy bucket",
         },
         {
           id: 3,
           name: "Zabb Team Box",
-          desc: "Wingz Zabb + nuggets combo",
           price: 149,
           cat: "bucket",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-3.png",
+          desc: "Wingz Zabb + nuggets combo.",
         },
         {
           id: 4,
           name: "Spicy Chicken Sandwich",
-          desc: "Crispy, spicy, and juicy",
           price: 89,
           cat: "sandwich",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-4.png",
+          desc: "Crispy, spicy, and juicy",
         },
         {
           id: 5,
           name: "Classic Sandwich",
-          desc: "Original crispy chicken",
-          price: 79,
+          price: 69,
           cat: "sandwich",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-5.png",
+          desc: "Original crispy chicken",
         },
         {
           id: 6,
           name: "Zinger Double",
-          desc: "Double patty, double flavor",
-          price: 119,
+          price: 199,
           cat: "sandwich",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-6.png",
+          desc: "Double patty, double flavor",
         },
         {
           id: 7,
-          name: "Fries",
-          desc: "Golden crispy fries",
-          price: 39,
+          name: "Golden Fries (L)",
+          price: 49,
           cat: "side",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-7.png",
+          desc: "Golden crispy fries",
         },
         {
           id: 8,
           name: "Coleslaw",
-          desc: "Creamy classic slaw",
-          price: 29,
+          price: 39,
           cat: "side",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-8.png",
+          desc: "Creamy classic slaw",
         },
+        // ** ตัวอย่างสินค้าหมด (Sold Out) **
         {
           id: 9,
           name: "Mac & Cheese",
-          desc: "Creamy, cheesy goodness",
           price: 49,
           cat: "side",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          img: "../images/menu-profile-9.png",
+          desc: "Creamy, cheesey goodness",
+          soldOut: true,
         },
         {
           id: 10,
           name: "Chocolate Cupcake",
-          desc: "Rich chocolate treat",
           price: 45,
-          cat: "dessert",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
+          cat: "desserts",
+          img: "../images/menu-profile-10.png",
+          desc: "Rich chocolate treat",
         },
         {
           id: 11,
-          name: "Soft Serve",
+          name: "Soft serve",
+          price: 39,
+          cat: "desserts",
+          img: "../images/menu-profile-11.png",
           desc: "Vanilla swirl",
-          price: 35,
-          cat: "dessert",
-          img: "",
-          emoji: "images/images/menu-list1.jpeg",
         },
       ];
 
-      // =========================================================
+      // --- ระบบ Cart ดึงจาก LocalStorage (ถ้ามี) ---
+      // เก็บโครงสร้างเป็น { id: 1, qty: 2 } เพื่อให้บริหารจัดการจำนวนง่ายขึ้น
+      let cart = JSON.parse(localStorage.getItem("crispyCart")) || [];
 
-      let cart = [],
-        total = 0,
-        currentSlide = 0,
-        mobCurrentSlide = 0;
+      let currentSlide = 0;
+      let slideInterval;
 
-      // helper: คืน style string สำหรับ background-image
-      function bgStyle(img) {
-        return img ? `background-image:url('${img}');` : "";
+      // --- ฟังก์ชันบันทึกตะกร้า ---
+      function saveCart() {
+        localStorage.setItem("crispyCart", JSON.stringify(cart));
+        updateUI();
       }
 
-      // ── Build promo slides
-      function buildPromos() {
-        const slides = document.getElementById("promoSlides");
-        const dots = document.getElementById("promoDots");
-        slides.innerHTML = PROMOS.map(
+      function renderPromos() {
+        // (ส่วนนี้โค้ดเดิมเหมือนที่เคยทำ)
+        const container = document.getElementById("promoContainer");
+        let slidesHTML = PROMOS.map(
           (p, i) => `
-    <div class="promo-slide${i === 0 ? " active" : ""}" id="slide-${i}">
-      <div class="slide-img${p.img ? "" : " no-img"}" style="${bgStyle(p.img)}">
-        ${p.img ? "" : p.emoji}
-      </div>
-      <div class="slide-content">
-        <span class="slide-tag">${p.tag}</span>
-        <div class="slide-title">${p.title}</div>
-        <div class="slide-price">${p.price}</div>
-        <div class="slide-desc">${p.desc}</div>
-        <button class="slide-cta" onclick="addDeal('${p.deal[0]}',${p.deal[1]})">Order Now</button>
-      </div>
-    </div>
-  `,
+          <div class="promo-slide ${i === 0 ? "active" : ""}" id="slide-${i}">
+            <div class="slide-img-container"><img src="${p.img}" alt="${p.title}"></div>
+            <div class="slide-content">
+              <span class="slide-tag bebas">${p.tag}</span>
+              <h2 class="slide-title bebas">${p.title}</h2>
+              <div class="slide-price bebas">${p.price}</div>
+              <button class="bg-secondary text-white px-8 py-3 rounded-md font-bold bebas text-xl hover:bg-white hover:text-black transition shadow-lg" 
+                      onclick="addToCartFromPromo('${p.title}')">
+                ORDER NOW
+              </button>
+            </div>
+          </div>
+        `,
         ).join("");
-        dots.innerHTML = PROMOS.map(
-          (_, i) => `
-    <button class="dot${i === 0 ? " active" : ""}" onclick="goSlide(${i})"></button>
-  `,
-        ).join("");
+
+        let dotsHTML =
+          `<div class="promo-controls">` +
+          PROMOS.map(
+            (_, i) =>
+              `<div class="promo-dot ${i === 0 ? "active" : ""}" onclick="goToSlide(${i})" id="dot-${i}"></div>`,
+          ).join("") +
+          `</div>`;
+        container.innerHTML = slidesHTML + dotsHTML;
       }
 
-      // ── Build mobile promo
-      function buildMobPromos() {
-        const car = document.getElementById("mobCarousel");
-        const dots = document.getElementById("mobDots");
-        car.innerHTML = PROMOS.map(
-          (p, i) => `
-    <div class="mob-slide${i === 0 ? " active" : ""}">
-      <div class="mob-slide-bg" style="${bgStyle(p.img)}"></div>
-      <div style="position:relative;z-index:2">
-        <div class="mob-slide-tag">${p.tag}</div>
-        <div class="mob-slide-title">${p.title}</div>
-        <div class="mob-slide-price">${p.price}</div>
-        <button class="mob-cta" onclick="addDeal('${p.deal[0]}',${p.deal[1]})">Order Now</button>
-      </div>
-    </div>
-  `,
-        ).join("");
-        dots.innerHTML = PROMOS.map(
-          (_, i) => `
-    <button class="mob-dot${i === 0 ? " active" : ""}" onclick="mobGoSlide(${i})"></button>
-  `,
-        ).join("");
-
-        // re-attach touch
-        car.addEventListener("touchstart", (e) => {
-          touchStartX = e.touches[0].clientX;
-        });
-        car.addEventListener("touchend", (e) => {
-          const dx = e.changedTouches[0].clientX - touchStartX;
-          if (Math.abs(dx) > 40)
-            mobGoSlide(
-              (mobCurrentSlide + (dx < 0 ? 1 : -1) + PROMOS.length) %
-                PROMOS.length,
-            );
-        });
+      function goToSlide(index) {
+        clearInterval(slideInterval);
+        document
+          .getElementById(`slide-${currentSlide}`)
+          .classList.remove("active");
+        document
+          .getElementById(`dot-${currentSlide}`)
+          .classList.remove("active");
+        currentSlide = index;
+        document
+          .getElementById(`slide-${currentSlide}`)
+          .classList.add("active");
+        document.getElementById(`dot-${currentSlide}`).classList.add("active");
+        slideInterval = setInterval(nextSlide, 5000);
       }
 
-      // ── Render menu grid + mobile list
-      function renderMenu(cat = "all") {
-        const items = cat === "all" ? MENU : MENU.filter((m) => m.cat === cat);
+      function nextSlide() {
+        goToSlide((currentSlide + 1) % PROMOS.length);
+      }
 
-        document.getElementById("menuGrid").innerHTML = items
-          .map(
-            (m) => `
-    <div class="menu-card">
-      <div class="menu-img" style="${bgStyle(m.img)}">
-        ${m.img ? "" : m.emoji}
-      </div>
-      <div class="menu-info">
-        <div class="menu-name">${m.name}</div>
-        <div class="menu-desc">${m.desc}</div>
-        <div class="menu-footer">
-          <div class="menu-price">฿${m.price}.-</div>
-          <button class="add-btn" onclick="addItem('${m.name}',${m.price})">+</button>
-        </div>
-      </div>
-    </div>
-  `,
-          )
+      // --- RENDER MENU & SOLD OUT LOGIC ---
+      function renderMenu(filter = "all") {
+        const grid = document.getElementById("menuGrid");
+        const items =
+          filter === "all" ? MENU : MENU.filter((m) => m.cat === filter);
+
+        grid.innerHTML = items
+          .map((m) => {
+            // ตรวจสอบว่าเมนูนี้ Sold Out หรือไม่
+            const isSoldOut = m.soldOut === true;
+
+            // กำหนดปุ่มและเอฟเฟกต์ภาพตามสถานะ
+            const imgClass = isSoldOut ? "sold-out-img" : "";
+            const buttonHtml = isSoldOut
+              ? `<button class="sold-out-btn" disabled>SOLD OUT</button>`
+              : `<button class="add-btn flex items-center justify-center gap-1" onclick="addToCart(${m.id})"><i data-lucide="plus" class="w-4 h-4"></i> ADD</button>`;
+
+            return `
+          <div class="menu-card flex flex-col justify-between h-full">
+            <div>
+              <div class="menu-img-box"><img src="${m.img}" alt="${m.name}" loading="lazy" class="${imgClass}"></div>
+              <div class="p-5 pb-2">
+                <h3 class="font-bold text-lg mb-1 leading-tight text-primary">${m.name}</h3>
+                <p class="text-xs text-gray-500 line-clamp-2">${m.desc}</p>
+              </div>
+            </div>
+            <div class="p-5 pt-0 mt-auto flex justify-between items-end">
+              <span class="text-2xl font-black text-secondary bebas tracking-wide">฿${m.price}</span>
+              ${buttonHtml}
+            </div>
+          </div>
+        `;
+          })
           .join("");
-
-        document.getElementById("mobMenuList").innerHTML = items
-          .map(
-            (m) => `
-    <div class="mob-card">
-      <div class="mob-card-img" style="${bgStyle(m.img)}">
-        ${m.img ? "" : m.emoji}
-      </div>
-      <div class="mob-card-info">
-        <div class="mob-card-name">${m.name}</div>
-        <div class="mob-card-desc">${m.desc}</div>
-        <div class="mob-card-price">฿${m.price}.-</div>
-      </div>
-      <button class="mob-add-btn" onclick="addItem('${m.name}',${m.price})">+</button>
-    </div>
-  `,
-          )
-          .join("");
+        lucide.createIcons();
       }
 
-      function addItem(name, price) {
-        cart.push({ name, price });
-        total += price;
-        updateCartUI();
-        showToast("Added: " + name);
-      }
-      function addDeal(name, price) {
-        addItem(name, price);
-      }
-
-      function updateCartUI() {
-        const count = cart.length;
-        document.getElementById("cartCount").textContent = count;
-        document.getElementById("mobCartCount").textContent =
-          count + " item" + (count !== 1 ? "s" : "");
-        document.getElementById("mobCartTotal").textContent =
-          "฿" + total + ".-";
-      }
-      function showCart() {
-        const items = cart.map((c) => c.name + " ฿" + c.price).join("\n");
-        /*alert('🛒 YOUR CART\n\n'+(cart.length?items:'Empty cart')+'\n\nTotal: ฿'+total);*/
-      }
-      function showToast(msg) {
-        const t = document.getElementById("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 2000);
-      }
-
-      function goSlide(n) {
-        document
-          .querySelectorAll("#promoSlides .promo-slide")
-          .forEach((s, i) => s.classList.toggle("active", i === n));
-        document
-          .querySelectorAll("#promoDots .dot")
-          .forEach((d, i) => d.classList.toggle("active", i === n));
-        currentSlide = n;
-      }
-      function mobGoSlide(n) {
-        document
-          .querySelectorAll("#mobCarousel .mob-slide")
-          .forEach((s, i) => s.classList.toggle("active", i === n));
-        document
-          .querySelectorAll("#mobDots .mob-dot")
-          .forEach((d, i) => d.classList.toggle("active", i === n));
-        mobCurrentSlide = n;
-      }
-
-      function filterCat(btn, cat) {
-        document
-          .querySelectorAll("#deskTabs .tab")
-          .forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderMenu(cat);
-      }
-      function mobFilter(btn, cat) {
-        document
-          .querySelectorAll("#mobTabs .mob-tab")
-          .forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
+      function filterMenu(cat, btn) {
+        document.querySelectorAll("#catTabs button").forEach((b) => {
+          b.classList.remove("bg-primary", "text-white");
+          b.classList.add("border-primary", "text-primary");
+        });
+        btn.classList.remove("border-primary", "text-primary");
+        btn.classList.add("bg-primary", "text-white");
         renderMenu(cat);
       }
 
-      let touchStartX = 0;
+      // --- CART LOGIC ---
+      function addToCart(id) {
+        const item = MENU.find((m) => m.id === id);
+        if (!item || item.soldOut) return;
 
-      // init
-      buildPromos();
-      buildMobPromos();
-      renderMenu();
+        // เช็คว่ามีเมนูนี้ในตะกร้าหรือยัง
+        const existingItem = cart.find((c) => c.id === id);
+        if (existingItem) {
+          existingItem.qty += 1; // มีแล้ว บวกลบจำนวนเพิ่ม
+        } else {
+          cart.push({ id: id, qty: 1 }); // ยังไม่มี สร้างใหม่
+        }
 
-      setInterval(() => goSlide((currentSlide + 1) % PROMOS.length), 4000);
-      setInterval(
-        () => mobGoSlide((mobCurrentSlide + 1) % PROMOS.length),
-        3500,
-      );
+        saveCart(); // บันทึกลง LocalStorage
+        showToast(item.name);
+      }
+
+      // ฟังก์ชันสำหรับแบนเนอร์โปรโมชั่น (แบนเนอร์ไม่มี id เลยอิงจากชื่อไปก่อน)
+      function addToCartFromPromo(title) {
+        alert("ระบบโปรโมชั่นคอมโบเซตจะมาในเฟสถัดไปครับ!");
+      }
+
+      // ฟังก์ชันกดปุ่ม + / - หรือลบใน Mini Cart
+      function updateQty(id, delta) {
+        const itemIndex = cart.findIndex((c) => c.id === id);
+        if (itemIndex > -1) {
+          cart[itemIndex].qty += delta;
+          if (cart[itemIndex].qty <= 0) {
+            cart.splice(itemIndex, 1); // ถ้าลดจนเหลือ 0 ให้ลบทิ้ง
+          }
+          saveCart();
+        }
+      }
+
+      function showToast(name) {
+        const toast = document.getElementById("toast");
+        document.getElementById("toast-text").innerText = `Added: ${name}`;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+
+        const cartWrapper = document.getElementById("cart-wrapper");
+        cartWrapper.classList.add("scale-110", "bg-secondary");
+        setTimeout(
+          () => cartWrapper.classList.remove("scale-110", "bg-secondary"),
+          300,
+        );
+      }
+
+      // --- UI UPDATES (อัปเดตทั้งบนจอและใน Mini Cart) ---
+      function updateUI() {
+        let totalItems = 0;
+        let totalPrice = 0;
+        const cartListHtml = document.getElementById("cartItemsList");
+        let htmlContent = "";
+
+        if (cart.length === 0) {
+          htmlContent = `
+            <div class="text-center text-gray-400 mt-16 flex flex-col items-center">
+              <i data-lucide="shopping-bag" class="w-16 h-16 mb-4 opacity-30"></i>
+              <p>ตะกร้าของคุณยังว่างเปล่า</p>
+            </div>`;
+        }
+
+        // จับคู่ข้อมูลตะกร้า (ที่เก็บแค่ ID) กับ ข้อมูลเมนูจริงๆ เพื่อดึงชื่อและราคา
+        cart.forEach((cartItem) => {
+          const menuItem = MENU.find((m) => m.id === cartItem.id);
+          if (menuItem) {
+            totalItems += cartItem.qty;
+            const itemTotal = menuItem.price * cartItem.qty;
+            totalPrice += itemTotal;
+
+            // วาด UI แต่ละชิ้นในตะกร้า
+            htmlContent += `
+              <div class="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                <img src="${menuItem.img}" class="w-16 h-16 object-cover rounded-md bg-gray-100">
+                <div class="flex-1">
+                  <h4 class="font-bold text-primary text-sm leading-tight">${menuItem.name}</h4>
+                  <div class="text-secondary font-black bebas text-lg">฿${itemTotal}</div>
+                </div>
+                
+                <div class="flex items-center gap-3 border border-gray-200 rounded-md px-1 py-1 bg-gray-50">
+                  <button onclick="updateQty(${menuItem.id}, -1)" class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-200 rounded transition"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                  <span class="w-4 text-center font-bold text-primary text-sm">${cartItem.qty}</span>
+                  <button onclick="updateQty(${menuItem.id}, 1)" class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-200 rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        // ยัด HTML ใส่ตะกร้า
+        cartListHtml.innerHTML = htmlContent;
+
+        // อัปเดตตัวเลขตามจุดต่างๆ
+        document.getElementById("cartCountDesktop").innerText = totalItems;
+        document.getElementById("mobCartCount").innerText =
+          `${totalItems} Items`;
+        document.getElementById("mobCartTotal").innerText = `฿${totalPrice}.-`;
+        document.getElementById("miniCartTotal").innerText =
+          `฿${totalPrice.toLocaleString()}.-`;
+
+        lucide.createIcons(); // วาดไอคอนใหม่
+      }
+
+      // --- เปิด/ปิด ตะกร้าด้านข้าง ---
+      function toggleCart() {
+        const sidebar = document.getElementById("cartSidebar");
+        const overlay = document.getElementById("cartOverlay");
+
+        if (sidebar.classList.contains("translate-x-full")) {
+          // เปิดตะกร้า
+          overlay.classList.remove("hidden");
+          // ใช้ setTimeout เพื่อให้เบราว์เซอร์จัดการคลาส display hidden ก่อนเล่น transition
+          setTimeout(() => {
+            overlay.classList.remove("opacity-0");
+            sidebar.classList.remove("translate-x-full");
+          }, 10);
+        } else {
+          // ปิดตะกร้า
+          sidebar.classList.add("translate-x-full");
+          overlay.classList.add("opacity-0");
+          setTimeout(() => {
+            overlay.classList.add("hidden");
+          }, 300); // รอ transition 0.3s จบก่อนซ่อน
+        }
+      }
+
+      // --- INIT ---
+      window.onload = () => {
+        renderPromos();
+        renderMenu();
+        updateUI(); // โหลดข้อมูลตะกร้าจาก LocalStorage ทันทีที่เปิดหน้า
+        slideInterval = setInterval(nextSlide, 5000);
+        lucide.createIcons();
+      };
     </script>
   </body>
 </html>
