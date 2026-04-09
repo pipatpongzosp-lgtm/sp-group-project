@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serious Punch | Seriously Good, Funny Vibes</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans+Thai:wght@300;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"IBM Plex Sans Thai"', "sans-serif"],
+              bebas: ['"Bebas Neue"', "sans-serif"],
+            },
+            colors: {
+              primary: "#242424", // ดำอมเทา
+              secondary: "#E4002B", // แดง (ใช้เฉพาะจุดเน้น)
+              accent: "#888888", // เปลี่ยน Accent เป็นสีเทาแทน
+              neutral: "#EEEEEE",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* --- 1. Custom Cursors (SVG Data URIs) --- */
+      body {
+        /* เคอร์เซอร์รูปลูกศรปกติ เปลี่ยนเป็นรูปกำปั้นลายเส้น */
+        cursor:
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="%23242424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21h8.5a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 19.5 9H14V3.5A1.5 1.5 0 0 0 12.5 2h-1a1.5 1.5 0 0 0-1.5 1.5V9H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h5v1z"/></svg>'),
+          auto;
+        background-color: #eeeeee;
+        overflow-x: hidden;
+      }
+      a,
+      button,
+      .interactive,
+      input[type="range"] {
+        /* เคอร์เซอร์เวลา Hover เปลี่ยนเป็นรูปหน้ายิ้มลายเส้นสีแดง */
+        cursor:
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="%23E4002B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>'),
+          pointer !important;
+      }
+
+      /* --- 2. Marquee Animation --- */
+      .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+        position: absolute;
+        width: 100vw;
+        z-index: 0;
+        opacity: 0.05; /* ดรอปความเข้มลงให้มินิมอลขึ้น */
+      }
+      .marquee-text {
+        display: inline-flex;
+        align-items: center;
+        font-size: 15rem;
+        line-height: 1;
+        animation: marquee 30s linear infinite;
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* --- 3. Punch Button Animation (Monochrome) --- */
+      .btn-punch {
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .btn-punch:hover {
+        animation: punchEffect 0.3s ease-in-out forwards;
+        background-color: #eeeeee;
+        color: #242424;
+      }
+      @keyframes punchEffect {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.15) rotate(-3deg);
+          box-shadow: 10px 10px 0px rgba(36, 36, 36, 0.3);
+        }
+        100% {
+          transform: scale(1.05) rotate(0deg);
+          box-shadow: 6px 6px 0px #242424; /* เงาสีดำแทนสีแดง */
+        }
+      }
+
+      /* --- 4. The Punch Meter (Range Slider) --- */
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        background: #242424; /* ปุ่มเลื่อนสีดำ */
+        cursor: pointer;
+        margin-top: -16px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border: 4px solid #fff;
+        transition: background 0.3s;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 8px;
+        cursor: pointer;
+        background: #ccc;
+        border-radius: 4px;
+      }
+
+      /* --- 5. IG Style Cards --- */
+      .ig-card {
+        background: #fff;
+        padding: 12px 12px 24px 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transform: rotate(-2deg);
+        transition: 0.3s;
+      }
+      .ig-card:nth-child(even) {
+        transform: rotate(3deg);
+      }
+      .ig-card:hover {
+        transform: rotate(0deg) scale(1.05) translateY(-10px);
+        z-index: 10;
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      /* --- 6. Shake Animation --- */
+      @keyframes shake {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-10deg) scale(1.1);
+        }
+        50% {
+          transform: rotate(10deg) scale(1.1);
+        }
+        75% {
+          transform: rotate(-10deg) scale(1.1);
+        }
+      }
+      .shake-active {
+        animation: shake 0.4s ease-in-out;
+      }
+
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body class="bg-neutral text-primary">
+    <header class="bg-primary text-neutral shadow-lg sticky top-0 z-50">
+      <nav
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <a
+            href="#"
+            class="text-3xl font-bold text-white bebas flex items-center gap-2 interactive"
+          >
+            <i data-lucide="hand-fist" class="h-8 w-8 text-white"></i>
+            <span>SERIOUS PUNCH</span>
+          </a>
+        </div>
+        <div class="hidden md:flex space-x-8 items-center">
+          <ul class="flex space-x-6 font-bold uppercase text-sm tracking-wider">
+            <li>
+              <a href="#" class="hover:text-secondary transition">Home</a>
+            </li>
+            <li>
+              <a href="#ethos" class="hover:text-secondary transition">Menu</a>
+            </li>
+            <li>
+              <a href="#gallery" class="hover:text-secondary transition"
+                >Order</a
+              >
+            </li>
+            <li>
+              <a href="#meter" class="hover:text-secondary transition"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <button
+            class="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white px-6 py-2 rounded-full font-bold transition"
+          >
+            Sign In
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <section
+      class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-neutral"
+    >
+      <div
+        class="marquee-container top-1/2 -translate-y-1/2 text-primary font-bebas tracking-tighter"
+      >
+        <div class="marquee-text flex items-center gap-10">
+          SERIOUSLY GOOD / NOT SO SERIOUS VIBES
+          <i data-lucide="drumstick" class="w-32 h-32 text-gray-400"></i>
+          SERIOUSLY GOOD / NOT SO SERIOUS VIBES
+          <i data-lucide="drumstick" class="w-32 h-32 text-gray-400"></i>
+        </div>
+      </div>
+
+      <div
+        class="container mx-auto px-4 relative z-10 grid md:grid-cols-2 items-center gap-8"
+      >
+        <div class="flex flex-col items-start space-y-6">
+          <div
+            class="inline-flex items-center gap-2 bg-transparent text-primar font-bold px-4 py-2 rounded-full text-sm uppercase tracking-widest backdrop-blur-sm border-solid border-[3px] border-primary"
+          >
+            The Dopamine Box <i data-lucide="package" class="w-4 h-4"></i>
+          </div>
+          <h1
+            class="font-bebas text-7xl md:text-8xl lg:text-9xl leading-[0.85] text-primary"
+          >
+            THE CRISPIEST<br />
+            <span class="text-gray-500">THE MOST BOLD.</span>
+          </h1>
+          <p class="text-xl md:text-2xl font-bold text-gray-500 max-w-md">
+            Serious taste, not-so-serious vibes. Authentic street flavor
+            delivered with a punch.
+          </p>
+          <button
+            class="btn-punch bg-secondary text-white font-bebas text-3xl px-10 py-4 rounded-lg flex items-center gap-3 border-[3px] border-primary"
+          >
+            ORDER NOW <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="relative flex justify-center mt-10 md:mt-0">
+          <img
+            src="../images/pro-1.png"
+            alt="Punchy Mascot"
+            class="w-full max-w-md object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 interactive grayscale hover:grayscale-0"
+          />
+
+          <div
+            class="absolute -bottom-5 -left-5 bg-white p-4 rounded-xl shadow-xl border-2 border-primary rotate-[-5deg] animate-bounce"
+            style="animation-duration: 3s"
+          >
+            <div class="flex gap-1 text-primary mb-1">
+              <i data-lucide="star" class="fill-current w-4 h-4"></i>
+              <i data-lucide="star" class="fill-current w-4 h-4"></i>
+              <i data-lucide="star" class="fill-current w-4 h-4"></i>
+              <i data-lucide="star" class="fill-current w-4 h-4"></i>
+              <i data-lucide="star" class="fill-current w-4 h-4"></i>
+            </div>
+            <p class="font-bold text-sm text-gray-600">
+              "Crispy than my future"
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--=========================================
+    ====================== รอแก้ไขต่อ ===========-->
+
+    <section id="ethos" class="bg-primary text-white py-20 relative">
+      <div class="container mx-auto px-4 grid md:grid-cols-2 gap-16">
+        <div class="hidden md:block h-full relative">
+          <div class="sticky top-32">
+            <img
+              src="https://placehold.co/500x500/111111/FFF?text=Punchy+on+Skateboard"
+              class="rounded-3xl shadow-2xl rotate-3 grayscale"
+              alt="Mascot Story"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-16 py-10">
+          <div class="space-y-4">
+            <h2 class="font-bebas text-5xl md:text-6xl text-secondary">
+              SERIOUS ABOUT TASTE.
+            </h2>
+            <p class="text-xl text-white">
+              We don't mess around when it comes to the crunch. Our chicken is
+              marinated for 24 hours, double-battered, and fried to absolute
+              perfection. It's science, bro.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <h2 class="font-bebas text-5xl md:text-6xl text-gray-500">
+              FUNNY ABOUT EVERYTHING ELSE.
+            </h2>
+            <p class="text-xl text-gray-400">
+              Life is too short for boring meals. Grab a bucket, share it with
+              your squad, and let the dopamine hit. This is street food culture
+              redefined.
+            </p>
+          </div>
+
+          <div class="bg-[#1a1a1a] p-8 rounded-2xl border-l-4 border-gray-500">
+            <h3 class="font-bold text-2xl mb-4 text-white">Our Promise:</h3>
+            <ul class="space-y-3 font-medium text-gray-300">
+              <li class="flex items-center gap-3">
+                <i data-lucide="check" class="text-white"></i> 100% Real Chicken
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="check" class="text-white"></i> 0% Boring Flavors
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="check" class="text-white"></i> 1000% Dopamine
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="py-24 bg-neutral overflow-hidden">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="font-bebas text-6xl text-primary">THE FLAVOR VIBE</h2>
+          <p class="text-gray-500 font-bold mt-2 uppercase tracking-widest">
+            Double tap to add dopamine
+          </p>
+        </div>
+
+        <div
+          class="flex md:grid md:grid-cols-3 lg:grid-cols-4 gap-8 overflow-x-auto pb-10 px-4 scrollbar-hide snap-x"
+        >
+          <div
+            class="ig-card min-w-[280px] snap-center interactive"
+            onclick="alert('Pop-up: Chick N\' Share details!')"
+          >
+            <img
+              src="https://placehold.co/400x400/242424/FFF?text=Bucket+1"
+              class="w-full aspect-square object-cover mb-4 grayscale hover:grayscale-0 transition duration-500"
+            />
+            <div class="flex justify-between items-center px-1 text-gray-700">
+              <div class="flex gap-4">
+                <i
+                  data-lucide="heart"
+                  class="hover:fill-primary hover:text-primary transition w-5 h-5"
+                ></i>
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <i data-lucide="send" class="w-5 h-5"></i>
+              </div>
+              <i data-lucide="bookmark" class="w-5 h-5"></i>
+            </div>
+            <div class="mt-4 px-1">
+              <p class="font-bold text-primary">The Signature Bucket</p>
+              <p class="text-sm text-gray-500">
+                Shared with the gang #SeriousPunch
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="ig-card min-w-[280px] snap-center interactive"
+            onclick="alert('Pop-up: Zinger Slider details!')"
+          >
+            <img
+              src="https://placehold.co/400x400/555555/FFF?text=Burger"
+              class="w-full aspect-square object-cover mb-4 grayscale hover:grayscale-0 transition duration-500"
+            />
+            <div class="flex justify-between items-center px-1 text-gray-700">
+              <div class="flex gap-4">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <i data-lucide="send" class="w-5 h-5"></i>
+              </div>
+              <i data-lucide="bookmark" class="w-5 h-5"></i>
+            </div>
+            <div class="mt-4 px-1">
+              <p class="font-bold text-primary">Zinger Slider Board</p>
+              <p class="text-sm text-gray-500">Kickflip into flavor</p>
+            </div>
+          </div>
+
+          <div
+            class="ig-card min-w-[280px] snap-center interactive"
+            onclick="alert('Pop-up: Loaded Fries details!')"
+          >
+            <img
+              src="https://placehold.co/400x400/888888/FFF?text=Fries"
+              class="w-full aspect-square object-cover mb-4 grayscale hover:grayscale-0 transition duration-500"
+            />
+            <div class="flex justify-between items-center px-1 text-gray-700">
+              <div class="flex gap-4">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <i data-lucide="send" class="w-5 h-5"></i>
+              </div>
+              <i data-lucide="bookmark" class="w-5 h-5"></i>
+            </div>
+            <div class="mt-4 px-1">
+              <p class="font-bold text-primary">Cheese Bomb Fries</p>
+              <p class="text-sm text-gray-500">Messy but worth it</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="meter" class="py-24 bg-white transition-colors duration-500">
+      <div class="container mx-auto px-4 max-w-4xl text-center">
+        <h2 class="font-bebas text-6xl mb-4 text-primary" id="meter-title">
+          CHOOSE YOUR PUNCH
+        </h2>
+        <p class="text-xl font-bold text-gray-500 mb-12">
+          How much heat can you handle?
+        </p>
+
+        <div
+          class="bg-neutral p-8 md:p-12 rounded-3xl shadow-inner relative overflow-hidden flex flex-col items-center"
+        >
+          <div
+            class="absolute inset-0 flex items-center justify-center pointer-events-none transition-transform duration-500 text-gray-300"
+            id="meter-bg-container"
+          >
+            <i
+              data-lucide="smile"
+              class="w-64 h-64 md:w-96 md:h-96 opacity-30"
+            ></i>
+          </div>
+
+          <div class="relative z-10 w-full">
+            <div
+              class="text-8xl font-black font-bebas text-primary mb-2 transition-colors duration-300"
+              id="meter-value"
+            >
+              LVL 1
+            </div>
+            <div class="text-2xl font-bold mb-8 text-primary" id="meter-label">
+              Mild & Chill
+            </div>
+
+            <input
+              type="range"
+              min="1"
+              max="5"
+              value="1"
+              id="spice-slider"
+              class="w-full max-w-xl"
+            />
+
+            <div
+              class="flex justify-between w-full max-w-xl mx-auto mt-4 font-bold text-sm text-gray-500"
+            >
+              <span>Baby</span>
+              <span>RIP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div
+      class="bg-primary text-gray-400 py-6 overflow-hidden border-y border-gray-800"
+    >
+      <div class="marquee-container relative h-8 opacity-100 flex items-center">
+        <div
+          class="marquee-text text-3xl font-bebas tracking-wide"
+          style="animation-duration: 35s"
+        >
+          "CRISPY THAN MY FUTURE" — @GENZ_EATER &nbsp; // &nbsp; "SERIOUS ABOUT
+          CHICKEN, PERIOD." — @STREETFOODIES &nbsp; // &nbsp; "THE DOPAMINE HIT
+          I NEEDED" — @PUNCHYFAN &nbsp; // &nbsp; "CRISPY THAN MY FUTURE" —
+          @GENZ_EATER &nbsp; // &nbsp; "SERIOUS ABOUT CHICKEN, PERIOD." —
+          @STREETFOODIES &nbsp; // &nbsp; "THE DOPAMINE HIT I NEEDED" —
+          @PUNCHYFAN &nbsp; // &nbsp;
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-[#111] text-white py-12">
+      <div
+        class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6"
+      >
+        <div class="flex items-center gap-2">
+          <i data-lucide="hand-fist" class="h-8 w-8 text-white"></i>
+          <span class="text-3xl font-bold bebas">SERIOUS PUNCH</span>
+        </div>
+        <div class="flex gap-6 text-gray-400">
+          <a href="#" class="hover:text-white transition"
+            ><i data-lucide="instagram"></i
+          ></a>
+          <a href="#" class="hover:text-white transition"
+            ><i data-lucide="twitter"></i
+          ></a>
+          <a href="#" class="hover:text-white transition"
+            ><i data-lucide="facebook"></i
+          ></a>
+        </div>
+        <p class="text-sm text-gray-500 font-bold">
+          © 2026 SERIOUS PUNCH. NO JOKES HERE.
+        </p>
+      </div>
+    </footer>
+
+    <div
+      id="floating-cart"
+      class="fixed bottom-6 right-6 bg-primary p-4 rounded-full shadow-2xl border-4 border-white cursor-pointer hover:bg-black transition z-50 flex items-center justify-center group"
+    >
+      <div class="relative">
+        <span
+          class="absolute -top-3 -right-3 bg-secondary text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white z-10"
+          >3</span
+        >
+        <i
+          data-lucide="shopping-bag"
+          class="w-8 h-8 text-white group-hover:scale-110 transition"
+        ></i>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // The Punch Meter Logic (Grayscale to Red)
+      const slider = document.getElementById("spice-slider");
+      const meterValue = document.getElementById("meter-value");
+      const meterLabel = document.getElementById("meter-label");
+      const meterSection = document.getElementById("meter");
+      const meterBgContainer = document.getElementById("meter-bg-container");
+      const meterTitle = document.getElementById("meter-title");
+
+      const spiceLevels = [
+        {
+          label: "Mild & Chill",
+          color: "#EEEEEE",
+          textClass: "text-primary",
+          icon: "smile",
+        },
+        {
+          label: "A Little Kick",
+          color: "#CCCCCC",
+          textClass: "text-gray-800",
+          icon: "thermometer",
+        },
+        {
+          label: "Getting Serious",
+          color: "#999999",
+          textClass: "text-gray-900",
+          icon: "flame",
+        },
+        {
+          label: "Sweat Mode",
+          color: "#555555",
+          textClass: "text-white",
+          icon: "zap",
+        },
+        {
+          label: "CALL THE AMBULANCE",
+          color: "#111111",
+          textClass: "text-secondary",
+          icon: "skull",
+        }, // แดงโผล่มาแค่จุดพีคสุด
+      ];
+
+      slider.addEventListener("input", (e) => {
+        const val = parseInt(e.target.value) - 1;
+        const level = spiceLevels[val];
+
+        meterValue.innerText = `LVL ${val + 1}`;
+        meterLabel.innerText = level.label;
+
+        // อัปเดตไอคอน Lucide แบบ Dynamic
+        meterBgContainer.innerHTML = `<i data-lucide="${level.icon}" class="w-64 h-64 md:w-96 md:h-96 opacity-20 text-gray-500"></i>`;
+        lucide.createIcons(); // ต้องสั่งเรนเดอร์ไอคอนใหม่
+
+        // อัปเดตสีพื้นหลังและตัวหนังสือ
+        meterSection.style.backgroundColor = level.color;
+        meterValue.className = `text-8xl font-black font-bebas mb-2 transition-colors duration-300 ${level.textClass}`;
+
+        if (val >= 3) {
+          meterTitle.classList.add("text-white");
+          meterLabel.classList.add("text-white");
+          meterLabel.classList.remove("text-primary");
+        } else {
+          meterTitle.classList.remove("text-white");
+          meterLabel.classList.remove("text-white");
+          meterLabel.classList.add("text-primary");
+        }
+      });
+
+      // Floating Cart Gimmick
+      const cartBtn = document.getElementById("floating-cart");
+      cartBtn.addEventListener("click", () => {
+        cartBtn.classList.remove("shake-active");
+        void cartBtn.offsetWidth;
+        cartBtn.classList.add("shake-active");
+        setTimeout(() => alert("เปิดตะกร้าสินค้า!"), 400);
+      });
+    </script>
+  </body>
+</html>
