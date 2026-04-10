@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SERIOUS PUNCH: CASHIER MODE</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans+Thai:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      :root {
+        --bg-color: #eeeeee;
+        --accent-red: #e4002b;
+        --card-black: #242424;
+        --text-white: #ffffff;
+        --gray-sub: #888888;
+        --success-green: #28a745;
+        --border-color: #e0e0e0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        font-family: "IBM Plex Sans Thai", sans-serif;
+        color: var(--card-black);
+        height: 100vh;
+        display: flex;
+        overflow: hidden;
+      }
+
+      /* ─── Sidebar (Desktop) ─── */
+      aside {
+        width: 90px;
+        background: var(--card-black);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 0;
+        gap: 35px;
+        border-right: 2px solid #333;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 100;
+      }
+
+      .nav-icon {
+        color: #ffffff;
+        cursor: pointer;
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 0.6rem;
+        font-family: "IBM Plex Sans Thai", sans-serif;
+        font-weight: 500;
+      }
+      .nav-icon:hover {
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+      .nav-icon.active {
+        color: var(--accent-red) !important;
+      }
+      .nav-icon.active span {
+        color: var(--accent-red) !important;
+      }
+
+      /* ─── Main Content ─── */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 25px;
+        gap: 20px;
+        margin-left: 90px;
+        height: 100vh;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .order-info-card {
+        background: var(--card-black);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 4px;
+        display: flex;
+        gap: 40px;
+        border-left: 6px solid var(--accent-red);
+      }
+
+      .order-info-card h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+      }
+      .order-info-card span {
+        color: var(--gray-sub);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+      }
+
+      /* --- Billing Section --- */
+      .billing-container {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 20px;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* Left: List Menu */
+      .bill-list-card {
+        background: white;
+        border: 3px solid var(--card-black);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .list-header {
+        background: var(--card-black);
+        color: white;
+        padding: 15px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 40px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+
+      .item-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .bill-item {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 40px;
+        padding: 15px 5px;
+        border-bottom: 1px solid var(--border-color);
+        align-items: center;
+        font-weight: 500;
+      }
+
+      .btn-void {
+        color: #ccc;
+        cursor: pointer;
+        border: none;
+        background: none;
+        transition: color 0.2s;
+      }
+      .btn-void:hover {
+        color: var(--accent-red);
+      }
+
+      /* --- Calculation Adjustments (Discount & SC) --- */
+      .adjustments-box {
+        background: #f9f9f9;
+        border-top: 2px solid var(--card-black);
+        padding: 15px;
+        display: flex;
+        gap: 15px;
+      }
+
+      .adjust-input {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex: 1;
+      }
+
+      .adjust-input label {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: var(--gray-sub);
+      }
+
+      .adjust-input input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: inherit;
+        text-align: right;
+      }
+
+      /* Right: Payment Area */
+      .payment-card {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .summary-box {
+        background: white;
+        border: 3px solid var(--card-black);
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        color: #555;
+      }
+
+      .summary-row.discount {
+        color: var(--accent-red);
+      }
+
+      .total-row {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px dashed #ccc;
+        font-size: 2.5rem;
+        font-family: "Bebas Neue", sans-serif;
+        color: var(--accent-red);
+      }
+
+      .payment-methods {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+      }
+
+      .method-btn {
+        background: white;
+        border: 2px solid var(--card-black);
+        padding: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        transition: 0.2s;
+      }
+
+      .method-btn.active {
+        background: var(--card-black);
+        color: white;
+      }
+
+      /* ─── Input & Quick Cash Area ─── */
+      .cash-section {
+        background: var(--card-black);
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .input-display {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      .input-row span {
+        font-size: 2rem;
+        font-family: monospace;
+      }
+
+      #input-pay {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 2.5rem;
+        font-family: monospace;
+        text-align: right;
+        width: 100%;
+        outline: none;
+        border-bottom: 2px solid transparent;
+        transition: 0.2s;
+      }
+
+      #input-pay:focus {
+        border-bottom: 2px solid var(--accent-red);
+      }
+
+      #input-pay::-webkit-outer-spin-button,
+      #input-pay::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      #input-pay:read-only {
+        color: var(--success-green);
+        border-bottom: none;
+        pointer-events: none;
+      }
+
+      /* Quick Cash Buttons */
+      .quick-cash-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 5px;
+      }
+
+      .quick-cash-btn {
+        background: #3a3a3a;
+        color: white;
+        border: 1px solid #555;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+        font-size: 0.9rem;
+      }
+
+      .quick-cash-btn:hover {
+        background: #4a4a4a;
+        border-color: #888;
+      }
+
+      .quick-cash-btn.exact {
+        background: var(--success-green);
+        border-color: #1e7e34;
+      }
+
+      .change-box {
+        background: #d4edda;
+        border: 2px solid var(--success-green);
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--success-green);
+        font-weight: bold;
+      }
+
+      .btn-checkout {
+        background: var(--accent-red);
+        color: white;
+        border: none;
+        padding: 20px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        cursor: pointer;
+        border-radius: 8px;
+        box-shadow: 0 6px 0 #800018;
+        transition: 0.1s;
+      }
+
+      .btn-checkout:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #800018;
+      }
+
+      .btn-checkout:disabled {
+        background: #ccc;
+        box-shadow: 0 6px 0 #999;
+        cursor: not-allowed;
+      }
+
+      /* ─── Bottom Nav (Mobile) ─── */
+      .bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--card-black);
+        border-top: 2px solid #333;
+        z-index: 100;
+        padding: 8px 0;
+        justify-content: space-around;
+      }
+      .bottom-nav .nav-icon {
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 0.6rem;
+      }
+      .bottom-nav .nav-icon.active {
+        color: var(--accent-red);
+      }
+      .bottom-nav .nav-icon.active span {
+        color: var(--accent-red);
+      }
+
+      @media (max-width: 900px) {
+        body {
+          flex-direction: column;
+          overflow-y: auto;
+        }
+        aside {
+          display: none;
+        }
+        .bottom-nav {
+          display: flex;
+        }
+        main {
+          margin-left: 0;
+          height: auto;
+          padding: 15px;
+          padding-bottom: 80px;
+        }
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+        .order-info-card {
+          width: 100%;
+          justify-content: space-between;
+          gap: 20px;
+        }
+        .billing-container {
+          display: flex;
+          flex-direction: column;
+          overflow: visible;
+        }
+        .bill-list-card {
+          height: 400px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .order-info-card {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .list-header,
+        .bill-item {
+          grid-template-columns: 2fr 1fr 1fr 30px;
+          font-size: 0.8rem;
+        }
+        .quick-cash-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <div class="nav-icon">
+        <i data-lucide="layout-grid"></i><span>แผนผัง</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="clipboard-list"></i><span>ออเดอร์</span>
+      </div>
+      <div class="nav-icon active">
+        <i data-lucide="banknote"></i><span>เก็บเงิน</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="history"></i><span>ประวัติ</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="settings"></i><span>ตั้งค่า</span>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <div class="order-info-card">
+          <div>
+            <span>Order No.</span>
+            <h2>#SP-8829</h2>
+          </div>
+          <div>
+            <span>Type / Table</span>
+            <h2>DINE-IN: T-02</h2>
+          </div>
+        </div>
+        <div style="font-family: &quot;Bebas Neue&quot;; font-size: 1.5rem">
+          9 APR 2024 | 14:30
+        </div>
+      </header>
+
+      <div class="billing-container">
+        <div class="bill-list-card">
+          <div class="list-header">
+            <div>Item Menu</div>
+            <div>Qty</div>
+            <div>Price</div>
+            <div></div>
+          </div>
+
+          <div class="item-scroll" id="bill-items"></div>
+
+          <div class="adjustments-box">
+            <div class="adjust-input">
+              <label>Discount (฿)</label>
+              <input
+                type="number"
+                id="input-discount"
+                value="0"
+                min="0"
+                oninput="calculateTotal()"
+              />
+            </div>
+            <div class="adjust-input">
+              <label>Service Charge (%)</label>
+              <input
+                type="number"
+                id="input-sc"
+                value="0"
+                min="0"
+                max="100"
+                oninput="calculateTotal()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-card">
+          <div class="summary-box">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="display-subtotal">฿0.00</span>
+            </div>
+            <div
+              class="summary-row discount"
+              id="row-discount"
+              style="display: none"
+            >
+              <span>Discount</span>
+              <span id="display-discount">-฿0.00</span>
+            </div>
+            <div class="summary-row" id="row-sc" style="display: none">
+              <span>Service Charge</span>
+              <span id="display-sc">฿0.00</span>
+            </div>
+            <div class="summary-row">
+              <span>VAT (7%)</span>
+              <span id="display-tax">฿0.00</span>
+            </div>
+            <div class="total-row">
+              <span>Total Amount</span>
+              <span id="display-total">฿0.00</span>
+            </div>
+          </div>
+
+          <div class="payment-methods">
+            <div class="method-btn active" onclick="setMethod('CASH', this)">
+              <i data-lucide="coins"></i> CASH
+            </div>
+            <div class="method-btn" onclick="setMethod('QR', this)">
+              <i data-lucide="qr-code"></i> QR PAY
+            </div>
+            <div class="method-btn" onclick="setMethod('CARD', this)">
+              <i data-lucide="credit-card"></i> CARD
+            </div>
+          </div>
+
+          <div class="cash-section" id="cash-section">
+            <div class="input-display">
+              <span
+                id="pay-label"
+                style="
+                  font-size: 0.8rem;
+                  color: #aaa;
+                  width: 100%;
+                  text-align: right;
+                "
+                >CUSTOMER PAY (CASH)</span
+              >
+              <div class="input-row">
+                <span>฿</span>
+                <input
+                  type="number"
+                  id="input-pay"
+                  placeholder="0.00"
+                  oninput="calculateChange()"
+                />
+              </div>
+            </div>
+
+            <div class="quick-cash-grid" id="quick-cash-grid">
+              <button
+                class="quick-cash-btn exact"
+                onclick="setQuickCash('exact')"
+              >
+                Exact
+              </button>
+              <button class="quick-cash-btn" onclick="setQuickCash(100)">
+                +100
+              </button>
+              <button class="quick-cash-btn" onclick="setQuickCash(500)">
+                +500
+              </button>
+              <button class="quick-cash-btn" onclick="setQuickCash(1000)">
+                +1000
+              </button>
+            </div>
+          </div>
+
+          <div class="change-box">
+            <span>TOTAL RETURN</span>
+            <span id="display-change" style="font-size: 1.5rem">฿0.00</span>
+          </div>
+
+          <button
+            class="btn-checkout"
+            id="btn-checkout"
+            onclick="confirmPayment()"
+          >
+            CHECKOUT & PRINT RECEIPT
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <div class="nav-icon">
+        <i data-lucide="layout-grid"></i><span>แผนผัง</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="clipboard-list"></i><span>ออเดอร์</span>
+      </div>
+      <div class="nav-icon active">
+        <i data-lucide="banknote"></i><span>เก็บเงิน</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="history"></i><span>ประวัติ</span>
+      </div>
+      <div class="nav-icon">
+        <i data-lucide="settings"></i><span>ตั้งค่า</span>
+      </div>
+    </nav>
+
+    <script>
+      let orderItems = [
+        { name: "Serious Punch Burger", qty: 2, price: 240 },
+        { name: "KFC Styled Fries (L)", qty: 1, price: 89 },
+        { name: "Coca-Cola Refill", qty: 3, price: 135 },
+        { name: "Spicy Wing (6pcs)", qty: 1, price: 159 },
+      ];
+
+      let rawSubtotal = 0;
+      let finalTotal = 0;
+      let paymentType = "CASH";
+
+      // 1. Render รายการอาหาร
+      function renderBillItems() {
+        const listContainer = document.getElementById("bill-items");
+        listContainer.innerHTML = "";
+        rawSubtotal = 0;
+
+        orderItems.forEach((item, index) => {
+          rawSubtotal += item.price;
+          const row = document.createElement("div");
+          row.className = "bill-item";
+          row.innerHTML = `
+                    <div>${item.name}</div>
+                    <div>x${item.qty}</div>
+                    <div>฿${item.price.toLocaleString()}</div>
+                    <button class="btn-void" onclick="removeItem(${index})"><i data-lucide="trash-2" style="width:18px"></i></button>
+                `;
+          listContainer.appendChild(row);
+        });
+
+        lucide.createIcons();
+        calculateTotal(); // คำนวณใหม่ทุกครั้งที่รายการเปลี่ยน
+      }
+
+      // 2. คำนวณยอดเงินทั้งหมดตามลำดับ
+      function calculateTotal() {
+        // ดึงค่า Discount และ SC จาก Input
+        let discount =
+          parseFloat(document.getElementById("input-discount").value) || 0;
+        let scRate = parseFloat(document.getElementById("input-sc").value) || 0;
+
+        // ลำดับการคำนวณที่ถูกต้อง
+        let afterDiscount = rawSubtotal - discount;
+        if (afterDiscount < 0) afterDiscount = 0;
+
+        let scAmount = afterDiscount * (scRate / 100);
+        let beforeTax = afterDiscount + scAmount;
+        let taxAmount = beforeTax * 0.07;
+
+        finalTotal = beforeTax + taxAmount;
+
+        // อัปเดต UI หน้าจอ
+        document.getElementById("display-subtotal").innerText =
+          `฿${rawSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+        // ซ่อน/แสดง บรรทัดส่วนลด และ SC
+        const rowDiscount = document.getElementById("row-discount");
+        const rowSC = document.getElementById("row-sc");
+
+        if (discount > 0) {
+          rowDiscount.style.display = "flex";
+          document.getElementById("display-discount").innerText =
+            `-฿${discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        } else {
+          rowDiscount.style.display = "none";
+        }
+
+        if (scRate > 0) {
+          rowSC.style.display = "flex";
+          document.getElementById("display-sc").innerText =
+            `฿${scAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        } else {
+          rowSC.style.display = "none";
+        }
+
+        document.getElementById("display-tax").innerText =
+          `฿${taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        document.getElementById("display-total").innerText =
+          `฿${finalTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+        // ถ้ายอดมีการเปลี่ยน หรือถ้าเป็น QR/CARD ต้องอัปเดตยอดรับเงินให้ตรงกันเสมอ
+        if (paymentType !== "CASH") {
+          document.getElementById("input-pay").value = finalTotal.toFixed(2);
+        }
+
+        calculateChange();
+      }
+
+      // 3. จัดการ Quick Cash Buttons
+      function setQuickCash(amount) {
+        const inputPay = document.getElementById("input-pay");
+
+        if (amount === "exact") {
+          inputPay.value = finalTotal.toFixed(2);
+        } else {
+          // บวกเงินเพิ่มจากที่พิมพ์ไว้ หรือแทนที่ถ้าว่าง
+          let currentPay = parseFloat(inputPay.value) || 0;
+          // ถ้าต้องการให้กดแล้วเป็นค่านั้นเลย ให้ใช้ inputPay.value = amount;
+          // แต่ถ้าต้องการให้บวกสะสม (เช่น ลูกค้าให้แบงก์พัน 2 ใบ กด 1000 สองครั้ง) ใช้บรรทัดล่าง:
+          inputPay.value = currentPay + amount;
+        }
+        calculateChange();
+      }
+
+      // 4. คำนวณเงินทอน
+      function calculateChange() {
+        const inputPay = document.getElementById("input-pay");
+        const changeDisplay = document.getElementById("display-change");
+        const btnCheckout = document.getElementById("btn-checkout");
+
+        let payAmount = parseFloat(inputPay.value) || 0;
+        let change = 0;
+
+        if (paymentType === "CASH") {
+          change = payAmount - finalTotal;
+          // ล็อกปุ่มถ้ายอดไม่ครบ หรือไม่มีออเดอร์
+          if (payAmount < finalTotal || finalTotal <= 0) {
+            btnCheckout.disabled = true;
+          } else {
+            btnCheckout.disabled = false;
+          }
+        } else {
+          change = 0;
+          btnCheckout.disabled = finalTotal <= 0; // ถ้ายอด 0 บาท กดจ่ายไม่ได้
+        }
+
+        changeDisplay.innerText = `฿${(change > 0 ? change : 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      }
+
+      // 5. เปลี่ยนวิธีจ่ายเงิน
+      function setMethod(method, element) {
+        paymentType = method;
+
+        document
+          .querySelectorAll(".method-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        element.classList.add("active");
+
+        const inputPay = document.getElementById("input-pay");
+        const payLabel = document.getElementById("pay-label");
+        const quickCashGrid = document.getElementById("quick-cash-grid");
+
+        if (method === "CASH") {
+          payLabel.innerText = "CUSTOMER PAY (CASH)";
+          inputPay.readOnly = false;
+          inputPay.value = "";
+          quickCashGrid.style.display = "grid"; // แสดงปุ่มแบงก์
+          inputPay.focus();
+        } else {
+          payLabel.innerText = `EXACT AMOUNT (${method} PAY)`;
+          inputPay.readOnly = true;
+          inputPay.value = finalTotal.toFixed(2);
+          quickCashGrid.style.display = "none"; // ซ่อนปุ่มแบงก์
+        }
+
+        calculateChange();
+      }
+
+      function removeItem(index) {
+        if (confirm("ต้องการยกเลิกรายการนี้ใช่หรือไม่?")) {
+          orderItems.splice(index, 1);
+          renderBillItems();
+        }
+      }
+
+      function confirmPayment() {
+        alert(
+          `รับชำระเงินเรียบร้อยผ่าน ${paymentType} จำนวน ${finalTotal.toFixed(2)} บาท! กำลังพิมพ์ใบเสร็จ...`,
+        );
+        // รีเซ็ตหลังจ่าย
+        orderItems = [];
+        document.getElementById("input-discount").value = "0";
+        document.getElementById("input-sc").value = "0";
+        document.getElementById("input-pay").value = "";
+        renderBillItems();
+      }
+
+      // Init Start
+      renderBillItems();
+    </script>
+  </body>
+</html>
